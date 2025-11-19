@@ -1,0 +1,128 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getSession } from '../../lib/session';
+
+// すでにログイン済みの場合はメンバーページへリダイレクト
+const session = getSession(Astro.cookies);
+if (session && session.loggedIn) {
+  return Astro.redirect('/members/');
+}
+
+const title = "ログインページ";
+const description = "広島県小児科医会のログインページです。会員専用サイトへのログインはこちらから。";
+const url = "https://blog.hiroshima-ped.com/members/login";
+const keyword = "広島県小児科医会, 広島, 広島県, 小児科医会, ログイン";
+---
+
+<Layout title={title} description={description} url={url}>
+  <main>
+    <div class="c-subpage__upper">
+      <div class="c-subpage__upper-ttl">Login</div>
+      <div class="c-subpage__upper-pagination">
+        <span><a href="/">トップ</a></span>
+        <span></span>
+        <span>会員ログインページ</span>
+      </div>
+    </div>
+
+    <section class="l-subpage">
+      <div class="c-login__wrap">
+        <h1 class="c-login__ttl u-font--32">会員ログイン</h1>
+
+        <form id="login-form" class="c-login__form">
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="ユーザー名"
+            required
+            class="c-login__input"
+            autocomplete="username"
+          />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="パスワード"
+            required
+            class="c-login__input"
+            autocomplete="current-password"
+          />
+          <button type="submit" class="c-login__button">ログイン</button>
+        </form>
+
+        <p id="message" class="c-login__caution" style="color: red; margin-top: 10px;"></p>
+
+        <div class="c-login__supplement">
+          <p>
+            ユーザー名またはパスワードを忘れた方は、
+            <a href="/contact">お問い合わせ</a>よりご連絡ください。
+          </p>
+          <p>
+            新規会員登録は
+            <a href="/contact">こちら</a>のお問い合わせから行ってください。
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("login-form") as HTMLFormElement | null;
+      const usernameInput = document.getElementById("username") as HTMLInputElement | null;
+      const passwordInput = document.getElementById("password") as HTMLInputElement | null;
+      const message = document.getElementById("message") as HTMLParagraphElement | null;
+
+      if (!form || !usernameInput || !passwordInput || !message) {
+        console.error('Form elements not found');
+        return;
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        console.log('Sending login request:', { username, passwordLength: password.length });
+
+        try {
+          const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { 
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+          });
+
+          console.log('Response status:', res.status);
+          console.log('Response headers:', res.headers.get('content-type'));
+
+          const text = await res.text();
+          console.log('Response text:', text);
+
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch (e) {
+            console.error('Failed to parse JSON:', e);
+            message.textContent = "サーバーエラーが発生しました。";
+            return;
+          }
+
+          console.log('Response data:', data);
+
+          if (data.success) {
+            window.location.href = "/members/";
+          } else {
+            message.textContent = data.error || "ユーザー名またはパスワードが違います。";
+          }
+        } catch (err) {
+          console.error('Login error:', err);
+          message.textContent = "サーバーエラーが発生しました。";
+        }
+      });
+    });
+  </script>
+</Layout>

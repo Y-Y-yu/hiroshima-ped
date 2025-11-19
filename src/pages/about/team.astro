@@ -1,0 +1,136 @@
+---
+
+// コンポーネント
+import Layout from '../../layouts/Layout.astro';
+
+const title = "組織・役員";
+const description = "広島県小児科医会の組織・役員のページです。";
+const url = "https://blog.hiroshima-ped.com/about/team";
+const keyword = "広島県小児科医, 広島, 広島県, 小児科医, 小児科医会, 小児科, 組織・役員";
+
+
+//画像
+
+---
+
+<Layout title={title} description={description} url={url}>
+	<div class="c-subpage__upper">
+		<div class="c-subpage__upper-ttl">
+			Team
+		</div>
+		<div class="c-subpage__upper-pagination">
+			<span><a href="/">トップ</a></span>
+			<span></span>
+			<span><a href="/about">広島県小児科医会について</a></span>
+			<span></span>
+			<span>組織・役員</span>
+		</div>
+	</div>
+    <section class="l-subpage">
+		<h1 class="c-subpage__ttl u-font--32">
+			組織・役員
+		</h1>
+        <h2 class="c-team-ttl">
+            組織
+        </h2>
+        <table class="c-team__organization-table">
+            <tbody>
+                <tr>
+                    <th>区分</th>
+                    <td>人数</td>
+                </tr>
+                <tr>
+                    <th>A会員</th>
+                    <td>138名</td>
+                </tr>
+                <tr>
+                    <th>B会員</th>
+                    <td>118名</td>
+                </tr>
+                <tr>
+                    <th>C会員</th>
+                    <td>10名</td>
+                </tr>
+                <tr>
+                    <th>合計</th>
+                    <td>266名</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="c-team__organization-supplement u-font--12">
+            2025年6月 現在
+        </div>
+        <h2 class="c-team-ttl">
+            役員
+        </h2>
+        <div class="c-team__officer-table-supplement">
+            令和7年4月〜令和9年3月
+        </div>
+        <table class="c-team__officer-table">
+            <tbody>
+                <tr>
+                    <th>
+                        会長
+                    </th>
+                    <td>
+                        西村 真一郎
+                    </td>
+                </tr>
+                <tr>
+                    <th>副会長</th>
+                    <td>佐藤 貴、佐々木 伸孝、岡野 里香</td>
+                </tr>
+                <tr>
+                    <th>会計</th>
+                    <td>矢野 美津子</td>
+                </tr>
+                <tr>
+                    <th>書記</th>
+                    <td>捻橋 紀久</td>
+                </tr>
+                <tr>
+                    <th>理事</th>
+                    <td>常務理事以下２５名</td>
+                </tr>
+                <tr>
+                    <th>監事</th>
+                    <td>下田 浩子、木原 幹夫</td>
+                </tr>
+                <tr class="c-team__officer-table-last">
+                    <th>顧問</th>
+                    <td>桑原 正彦、森 美喜夫</td>
+                </tr>
+            </tbody>
+        </table>
+        <h2 class="c-team-ttl">
+            日本小児科医会
+        </h2>
+        <div class="c-team__officer-table-supplement">
+            任期令和7年4月1日から2年間
+        </div>
+        <table class="c-team__japan-table">
+            <tbody>
+                <tr>
+                    <th>代議員</th>
+                    <td>森 美喜夫、西村 真一郎</td>
+                </tr>
+                <tr>
+                    <th>予備代議員</th>
+                    <td>佐々木 伸孝（筆頭）、佐藤 貴</td>
+                </tr>
+                <tr>
+                    <th>公衆衛生委員会</th>
+                    <td>森 美喜夫</td>
+                </tr>
+                <tr>
+                    <th>成育基本法推進特別委員会</th>
+                    <td>西村 真一郎</td>
+                </tr>
+                <tr class="c-team__japan-table-last">
+                    <th>地域総合小児医療検討委員会</th>
+                    <td>杉原 雄三</td>
+                </tr>
+            </tbody>
+        </table>
+	</section>
+</Layout>

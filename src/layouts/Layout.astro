@@ -1,0 +1,70 @@
+---
+const {
+	title,
+    description,
+    url,
+    type = 'website',
+    keywords = '',
+} = Astro.props;
+
+import Header from '../components/header.astro';
+import Footer from '../components/footer.astro';
+
+
+---
+
+<html lang="ja">
+    <head>
+    <!-- 文字コード・ブラウザ互換性 -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- レスポンシブ対応 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ページタイトル -->
+    <title>{title ? `${title}｜広島県小児科医会` : '広島県小児科医会'}</title>
+
+    <!-- 検索エンジン向けの概要（70文字以内が理想） -->
+    <meta
+        name="description"
+        content={description ?? '広島県小児科医会のホームページです。'}
+    />
+
+    <!-- 検索キーワード -->
+    <meta name="keywords" content={keywords} />
+
+    <!-- OGP（SNSでのシェア時に表示される情報） -->
+    <meta property="og:url" content={url ?? Astro.url} />
+    <meta property="og:title" content={title ?? '広島県小児科医会'} />
+    <meta property="og:type" content={type} />
+    <meta
+        property="og:description"
+        content={description ?? '広島県小児科医会のホームページです。'}
+    />
+    <meta property="og:image" content="favicon.ico" />
+    <meta property="og:site_name" content="広島県小児科医会" />
+    <meta property="og:locale" content="ja_JP" />
+
+    <!-- クローラー設定 -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- ファビコン設定 -->
+    <!-- 通常のファビコン -->
+    <link rel="icon" href="/favicon.ico" />
+
+    <!-- iOS用 -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" sizes="180x180" />
+
+    <!-- Android用 -->
+    <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192" />
+	<link rel="stylesheet" href="/css/style.css">
+	</head>
+
+	<body class="l-bg">
+        <Header />
+		<slot />
+        <Footer />
+	</body>
+    <script src="../scripts/header-hide.js"></script>
+</html>

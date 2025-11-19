@@ -1,0 +1,23 @@
+---
+const {
+    cardTtl,
+    cardText,
+    Link,
+    target,
+} = Astro.props;
+
+
+---
+
+<a class="c-card" href={Link} target={target ? `${target}` : '_self'}>
+    <div class="c-card__text">
+        <div class="c-card__text-ttl u-font--20">
+            {cardTtl}
+        </div>
+        <div class="c-card__text-text">
+            {cardText}
+        </div>
+    </div>
+    <div class="c-card__arrow"></div>
+</a>
+

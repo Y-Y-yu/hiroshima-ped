@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+@font-face {
+	font-family: "NotoSansJP";
+	src:  url('../../public/font/NotoSansJP-VariableFont_wght.ttf'), format('truetype'), local('NotoSansJP');
+}
+@font-face {
+	font-family: "MPLUSRounded1c";
+	src:  url('../../public/font/MPLUSRounded1c-Regular.ttf'), format('truetype'), local('MPLUSRounded1c');
+}
+@font-face {
+	font-family: "Montserrat";
+	src:  url('../../public/font/Montserrat-VariableFont_wght.ttf'), format('truetype'), local('Montserrat');
+}
+
+$main-font: "NotoSansJP";
+$font-family: $main-font, sans-serif;
+$decoration-font: "Montserrat", sans-serif;
+$logotype-font: "MPLUSRounded1c", sans-serif;
+$font-weight-normal: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+
+/**********************************************************************
+フォントサイズ
+**********************************************************************/
+html {
+    font-size: 100%;
+    @media screen and (max-width:375px) {
+        font-size: calc(100vw / 23.4375);
+    }
+}
+
+h2 {
+	font-size: clamp(1.5rem, 1.293rem + 0.88vw, 2rem);
+}
+
+

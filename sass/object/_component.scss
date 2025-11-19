@@ -1,0 +1,1521 @@
+@charset "utf-8";
+@use "../global/forwards" as *;
+
+
+/**********************************************************************
+header
+**********************************************************************/
+.c-header {
+    //logo
+    &__logo {
+        position: relative;
+        z-index: 101;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        &-symbol {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 1.25rem;
+        }
+        &-text {
+            color: $main-color;
+            font-size: 1.25rem;
+            font-family: $logotype-font;
+        }
+    }
+    //nav
+    &__nav {
+        display: flex;
+        align-items: center;
+        gap: 0 1.5rem;
+        padding: 1rem 3rem;
+        background-color: $glass;
+        border-radius: 3rem;
+        @include mq("md") {
+            padding: 1rem 0;
+            background-color: inherit;
+        }
+        &-lists {
+            display: flex;
+            align-items: center;
+            gap: 0 1.5rem;
+            @include mq("2xl") {
+                display: none;
+            }
+        }
+        &-btn {
+            position: relative;
+            padding: .75rem 1.5rem;
+            color: $white;
+            background-color: $main-color;
+            border-radius: 3em;
+            transition: .8s ease;
+            @include mq("md") {
+                display: none;
+            }
+            @media screen and (min-width: 1280px) {
+                &:hover {
+                    color: $white;
+                    background-color: $gray;
+                }
+            }
+        }
+    }
+    //ham
+    &__ham {
+        position: relative;
+        z-index: 101;
+        display: none;
+        width: 2.5rem;
+        height: 2.5rem;
+        @include mq("2xl") {
+            display: flex;
+        }
+        &-bar {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 0.1rem;
+            background-color: $main-color;
+            transition: .8s ease;
+            transform: translateX(-50%);
+            &:nth-child(1) {
+                transform: translate(-50%,-.75rem);
+            }
+            &:nth-child(3) {
+                transform: translate(-50%,.75rem);
+            }
+        }
+        &.open span:nth-of-type(1) {
+            transform: translate(-50%,-50%) rotate(150deg);
+        }
+        &.open span:nth-of-type(2) {
+            width: 0;
+        }
+        &.open span:nth-of-type(3) {
+            transform: translate(-50%,-50%) rotate(-150deg);
+        }
+
+        //hamのメニュー
+        &-lists {
+            position: fixed;
+            top: -1.5rem;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            width: calc(100% - 3rem);
+            height: calc(100vh - 3rem);
+            margin: 1.5rem;
+            padding: 8.5rem 3rem 1.5rem;
+            background-color: $white;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .8s ease;
+            border-radius: 1.5em;
+            font-size: 1.25rem;
+            overflow-y: auto;
+            @include mq("2xl") {
+                padding: 8.5rem 1.5rem 1.5rem;
+            }
+            @include mq("xl") {
+                padding: 8.5rem 1rem 1.5rem;
+            }
+            @include mq("lg") {
+                width: calc(100% - 2rem);
+                height: calc(100vh - 2rem);
+                margin: 1rem;
+                padding: 8.5rem 1rem 1.5rem;
+            }   
+            @include mq("md") {
+                width: calc(100% - 1rem);
+                height: calc(100vh - 1rem);
+                margin: .5rem;
+                padding: 8.5rem 1rem 1.5rem;
+            }
+            @include mq("2xl") {
+                &.active {
+                    display: flex;
+                    opacity: 1;
+                    pointer-events: auto;
+                }
+            }
+        }
+        &-list {
+            &:nth-child(n+2) {
+                margin-top: 2rem;
+            }
+        }
+        &-btn {
+            margin: 1.5rem 0 0 auto;
+            a {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: .75rem 1.5rem;
+                width: 16.875rem;
+                border: .1rem solid $main-color;
+                border-radius: 2rem;
+                transition: .8s ease;
+                @media screen and (min-width: 1025px) {
+                    &:hover span::after {
+                        animation: arrow .8s;
+                    }
+                }
+            }
+            &-arrow {
+                position: relative;
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                background-color: $main-color;
+                color: $white;
+                overflow: hidden;
+                &::after {
+                    content: "→";
+                    position: absolute;
+                    z-index: 0;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%,-50%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+            &:nth-child(6) {
+                margin-top: 3rem;
+            }
+        }
+        &-policy {
+            display: flex;
+            flex-direction: row;
+            gap: 0 1.5rem;
+            margin: 7.5rem auto 0;
+            font-size: .75rem;
+            a:first-child {
+                position: relative;
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    right: -.75rem;
+                    width: 0.1rem;
+                    height: 0.75rem;
+                    background-color: $black;
+                }
+            }
+        }
+    }
+}
+
+/**********************************************************************
+footer
+**********************************************************************/
+.c-footer {
+    &__upper {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 4rem;
+        border-bottom: 1px solid $white;
+        @include mq("xl") {
+            flex-direction: column;
+        }
+    }
+    &__logo {
+        display: flex;
+        flex-direction: column;
+        gap: .75rem 0;
+        &--eng {
+            font-family: $decoration-font;
+        }
+    }
+    &__address {
+        margin-top: 3rem;
+        line-height: 1.6;
+        @include mq("xl") {
+        }
+    }
+    &__nav-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: end;
+        @include mq("xl") {
+            flex-direction: row;
+            align-items: start;
+            margin-top: 3rem;
+        }
+        @include mq("lg") {
+            flex-direction: column;
+            gap: 1.5rem 0;
+        }
+    }
+    &__nav-lists {
+        display: flex;
+        gap: 0 2rem;
+        @include mq("md") {
+            flex-direction: column;
+            gap: 1.5rem 0;
+        }
+    }
+    &__btns {
+        display: flex;
+        flex-direction: column;
+        gap:  2rem 0;
+        @include mq("lg") {
+            margin: 0 0 0 auto;
+        }
+    }
+    &__btn {
+        a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: .75rem 1.5rem;
+            width: 16.875rem;
+            border: 1px solid $white;
+            border-radius: 2em;
+            @media screen and (min-width:1025px) {
+                &:hover span::before {
+                    animation: arrow linear .8s;
+                }
+            }
+        }
+        &-arrow {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: $white;
+            &::before {
+                content: "→";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                color: $main-color;
+            }
+        }
+    }
+    &__lower {
+        display: none;
+        margin-top: 4rem;
+        &-title {
+            font-size: clamp(1.25rem, 1.146rem + 0.44vw, 1.5rem);
+        }
+    }
+    &__link {
+        &-wrap {
+            display: grid;
+            grid-template-columns: 48% 48%;
+            gap: 2.25rem 4%;
+            margin-top: 2.25rem;
+            line-height: 1.6;
+            @include mq("md") {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem 0;
+            }
+        }
+        &:first-child {
+            font-size: clamp(1.125rem, 1.073rem + 0.22vw, 1.25rem);
+        }
+        &:nth-child(n+2) {
+            position: relative;
+            margin-top: 1.5rem;
+            padding-left: 1rem;
+            &::after {
+                content: "・";
+                position: absolute;
+                top: clamp(0.7rem, 0.659rem + 0.18vw, 0.8rem);
+                left: .5em;
+                transform: translate(-50%,-50%);
+
+            }
+        }
+    }
+    &__policy {
+        display: flex;
+        justify-content: center;
+        gap: 0 1.5rem;
+        margin: 4rem auto 0;
+        a:first-child {
+            position: relative;
+            &::after {
+                content: "";
+                position: absolute;
+                left: calc(100% + .75rem);
+                top: 0;
+                width: 1px;
+                height: 0.75rem;
+                background-color: $white;
+                pointer-events: none;
+            }
+        }
+    }
+    &__copyright {
+        text-align: right;
+        margin-top: 1em;
+    }
+}
+
+
+
+
+/**********************************************************************
+kv
+**********************************************************************/
+.c-kv__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3rem 0;
+    color: $white;
+    text-align: center;
+    text-shadow: 2px 3px 3px rgba(0, 0, 0, 0.4);
+    &--eng {
+        font-family: $decoration-font;
+        font-size: 4rem;
+        @include mq("lg") {
+            font-size: 3rem;
+        }
+        @include mq("md") {
+            text-align-last: left;
+            line-height: 1.6;
+        }
+    }
+    &--jp {
+        font-size: 2.5rem;
+        @include mq("lg") {
+            font-size: 2rem;
+        }
+        @include mq("md") {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+
+
+/**********************************************************************
+about
+**********************************************************************/
+.c-about {
+    //slide
+    &__slide {
+        display: flex;
+        width: 100%;
+        overflow: hidden;
+        &-text {
+            flex: 0 0 auto;
+            padding-left: 2.34375rem;
+            animation: slide-text 60s linear infinite;
+            color: $white;
+            font-size: 9.375rem;
+            font-family: $decoration-font;
+            pointer-events: none;
+            white-space: nowrap;
+            @include mq("md") {
+                padding-left: 1.5rem;
+                font-size: 6rem;
+            }
+            &:nth-child(2) {
+                animation: slide-text2 60s -30s linear infinite;
+            }
+        }
+    }
+    //box
+    &__box {
+        width: 100%;
+        max-width: 1280px;
+        margin: 3rem auto 0;
+        padding: 4.5rem 6.25rem;
+        background-color: $ivory;
+        border-radius: 1rem;
+        @include mq("2xl") {
+            width: calc(100% - 6rem);
+        }
+        @include mq("xl") {
+            width: calc(100% - 5rem);
+        }
+        @include mq("lg") {
+            width: calc(100% - 4rem);
+            padding: 4rem 5rem;
+        }
+        @include mq("md") {
+            width: calc(100% - 3rem);
+            padding: 3.5rem 1rem;
+        }
+        @include mq("sm") {
+            width: calc(100% - .75rem );
+            padding: 3rem .75rem;
+        }
+        &-text {
+            margin: 1.25em 0;
+            line-height: 1.6;
+        }
+        &-btn {
+            width: 100%;
+            a {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1.25rem 1.5rem;
+                transition: .8s ease;
+                border-top: .1rem solid $black;
+                span {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 3.75rem;
+                    height: 3.75rem;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    background-color: $main-color;
+                    &::after {
+                        content: "→";
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%,-50%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 3.75rem;
+                        height: 3.75rem;
+                        color: $white;
+                    }
+                }
+                @media screen and (min-width:1025px) {
+                    &:hover span::after {
+                        animation: arrow .8s;
+                    }
+                    &:hover {
+                        background-color: $glass;
+                    }
+                }
+            }
+            &:nth-child(4) {
+                border-bottom: .1rem solid $black;
+            }
+        }
+    }
+}
+
+
+
+/**********************************************************************
+members
+**********************************************************************/
+.c-members {
+    &__accent-ttl {
+        transform: translateX(-101px);
+        font-size: 128px;
+        font-family: $decoration-font;
+        font-weight: 500;
+        color: $accent-color;
+        @include mq("xl") {
+            position: relative;
+            left: calc(50% - 50vw);
+            transform: translateX(0);
+            width: 100vw;
+            padding: 0 2.5rem;
+        }
+        @include mq("lg") {
+            font-size: 96px;
+        }
+        @include mq("md") {
+            font-size: 4rem;
+            left: inherit;
+            padding: 0;
+            width: 100%;
+        }
+        @include mq("sm") {
+            font-size: 4rem;
+        }
+    }
+    &__ttl {
+        margin-top: 4rem;
+        @include mq("md") {
+            margin-top: 2rem;
+        }
+    }
+    &__text {
+        margin: 1.25rem 0;
+        line-height: 1.6;
+    }
+    &__box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        @include mq("md") {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+
+
+/**********************************************************************
+card
+**********************************************************************/
+.c-card {
+    display: grid;
+    grid-template-columns: auto 3.75rem;
+    gap: 0 .5em;
+    align-items: center;
+    width: 100%;
+    padding: 3rem 1.5rem;
+    background-color: $ivory;
+    border-radius: 1em;
+    @include mq("md") {
+        padding: 2rem 1.5rem;
+    }
+    @media screen and (min-width:1025px) {
+    &:hover .c-card__arrow::after {
+        animation: arrow .8s;
+    }
+    &:hover {
+        background-color: $white;
+    }
+    }
+    &__text {
+        display: grid;
+        grid-auto-rows: auto auto;
+        gap: 1.25rem 0;
+        &-text {
+            line-height: 1.6;
+        }
+    }
+    &__arrow {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.75rem;
+        height: 3.75rem;
+        border-radius: 50%;
+        overflow: hidden;
+        background-color: $main-color;
+        &::after {
+            content: "→";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3.75rem;
+            height: 3.75rem;
+            color: $white;
+        }
+    }
+}
+
+
+/**********************************************************************
+news　セクション
+**********************************************************************/
+.c-news {
+    &__accent-ttl {
+    transform: translateX(-101px);
+    font-size: 128px;
+    font-family: $decoration-font;
+    font-weight: 500;
+    color: $accent-color;
+    @include mq("xl") {
+        position: relative;
+        left: calc(50% - 50vw);
+        transform: translateX(0);
+        width: 100vw;
+        padding: 0 2.5rem;
+    }
+    @include mq("lg") {
+        font-size: 96px;
+    }
+    @include mq("md") {
+        font-size: 4rem;
+        left: inherit;
+        padding: 0;
+        width: 100%;
+    }
+    @include mq("sm") {
+        font-size: 4rem;
+    }
+    }
+    &__ttl {
+        margin-top: 4rem;
+        @include mq("md") {
+            margin-top: 2rem;
+        }
+    }
+    &__list {
+        display: grid;
+        grid-template-columns: 20% 75%;
+        gap: 0 5%;
+        align-items: center;
+        padding: 2rem 1rem;
+        width: 100%;
+        border-top: .1rem solid $black;
+        @include mq("md") {
+            grid-template-columns: 30% 65%;
+        }
+        @media screen and (min-width:1025px) {
+            &:hover .c-news__list-img img {
+                transform: scale(1.1);
+            }
+        }
+        &-img {
+            overflow: hidden;
+            img {
+                transition: .8s ;
+            }
+        }
+        &-ttl {
+            margin-top: 1rem;
+            font-size: clamp(1.125rem, 1.073rem + 0.22vw, 1.25rem);
+            overflow: hidden;         
+            text-overflow: ellipsis;  
+            white-space: nowrap;
+        }
+        &:last-child {
+                border-bottom: .1rem solid $black;
+        }
+    }
+    &__lists {
+        margin-top: 2rem;
+    }
+    &__box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 5%;
+        margin-top: 2rem;
+        @include mq("xl") {
+            grid-template-columns: 1fr;
+            gap: 5% 0;
+        }
+    }
+
+    &__btn {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .75rem 1.5rem;
+        width: 16.875rem;
+        border: 1px solid $main-color;
+        border-radius: 2em;
+        @media screen and (min-width:1025px) {
+            &:hover span::before {
+                animation: arrow linear .8s;
+            }
+        }
+        &-arrow {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: $main-color;
+            overflow: hidden;
+            &::before {
+                content: "→";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                color: $white;
+            }
+        }
+        &-wrap {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+    }
+}
+
+
+
+/**********************************************************************
+subpage
+第２階層以下
+**********************************************************************/
+.c-subpage {
+    &__upper {
+        padding: 0 4.5rem ;
+        margin: 16.25rem auto 0;
+        max-width: 1920px;
+        width: 100%;
+        @include mq("2xl") {
+            padding: 0 3rem;
+        }
+        @include mq("xl") {
+            padding: 0 2.5rem;
+        }
+        @include mq("lg") {
+            padding: 0 2rem;
+        }
+        @include mq("md") {
+            padding: 0 1.5rem;
+        }
+        &-ttl {
+            font-size: 96px;
+            font-family: $decoration-font;
+            color: $light-blue;
+            font-weight: 500;
+            @include mq("md") {
+                font-size: 4.5rem;
+            }
+            @include mq("sm") {
+                font-size: 3.5rem;
+            }
+        }
+        &-pagination {
+            display: flex;
+            gap: 0 .5rem;
+            margin-top: 1.25rem;
+            span:nth-child(2n) {
+                position: relative;
+                &::after,
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    height: 50%;
+                    width: 0.1em;
+                    background-color: $black;
+                }
+                &::after {
+                    transform: translate(-50%,-23%) rotate(45deg);
+                }
+                &::before {
+                    transform: translate(-50%,-78%) rotate(-45deg);
+                }
+            }
+        }
+    }
+    &__subtext {
+        margin-top: 1.25rem;
+        line-height: 1.6;
+    }
+    &__nav-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-top: 3rem;
+        @include mq("md") {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+
+
+
+/**********************************************************************
+contact
+**********************************************************************/
+.c-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem 0;
+    &__wrap {
+        margin-top: 3rem;
+    }
+    &__item {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        font-size: clamp(1.125rem, 1.073rem + 0.22vw, 1.25rem);
+        &-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            &-necessary {
+                background-color: $main-color;
+                color: $white;
+                padding: .3em .5em;
+            }
+            &-any {
+                background-color: $light-blue;
+                color: $white;
+                padding: .3em .5em;
+            }
+        }
+        &-input,
+        &-textarea {
+            border: .1rem solid $black;
+            border-radius: .3em;
+            line-height: 1.8;
+            padding: .3em .5em;
+            width: 100%;
+            &:focus {
+                outline: none;
+                border: .1rem solid $light-blue;
+            }
+        }
+        &-birthday {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0 1rem;
+            align-items: center;
+            span {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0 .5rem;
+                width: 100%;
+                input {
+                    text-align: center;
+                }
+            }
+        }
+        &-radio {
+            padding: 1rem .5rem;
+            width: 100%;
+            border: .1rem solid $black;
+            border-radius: .3em;
+            text-align: center;
+            transition: .8s;
+            &-wrap {
+                display: flex;
+                flex-direction: row;
+                align-items: start;
+                justify-content: space-between;
+                gap: 0 1rem;
+                @include mq("md") {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 1rem;
+                }
+                input {
+                    display: none;
+                }
+                input:checked + label {
+                    background-color: $main-color;
+                    color: $white;
+                    border: .1rem solid $main-color;
+                }
+            }
+        }
+    }
+    &__submit {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .75rem 1.5rem;
+        margin: 0 auto;
+        width: 16.875rem;
+        border: 1px solid $main-color;
+        border-radius: 2em;
+        @media screen and (min-width:1025px) {
+        &:hover span::before {
+            animation: arrow linear .8s;
+            }
+        }
+        &-arrow {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: $main-color;
+            overflow: hidden;
+            &::before {
+                content: "→";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                color: $white;
+            }
+        }
+    }
+}
+
+
+
+/**********************************************************************
+message
+**********************************************************************/
+.c-message {
+    margin-top: 3rem;
+    p {
+        line-height: 1.6;
+        text-indent: clamp(0.875rem, 0.823rem + 0.22vw, 1rem);
+        &:nth-child(n+2){
+            margin-top: 2rem;
+        }
+        &:last-child {
+            text-align: right;
+        }
+    }
+    &-sign {
+        margin-left: 1em;
+    }
+}
+
+
+
+/**********************************************************************
+team
+**********************************************************************/
+.c-team {
+    &-ttl {
+        margin-top: 3rem;
+        font-size: clamp(1.25rem, 1.146rem + 0.44vw, 1.5rem);
+    }
+    &__organization {
+        &-table {
+            width: 100%;
+            margin-top: 2rem;
+            tbody {
+                display: flex;
+                width: 100%;
+                tr {
+                    display: flex;
+                    flex-direction: column;
+                    width: 100%;
+                    text-align: center;
+                    border: .1rem solid $black;
+                    &:nth-child(n+2) {
+                        border-left: none;
+                    }
+                }
+                th {
+                    font-weight: normal;
+                    text-align: center;
+                    border-bottom: .1rem solid $black;
+                }
+                th,td {
+                    padding: .5rem .5rem;
+                }
+            }
+        }
+        &-supplement {
+            margin-top: 1rem;
+            text-align: right;
+        }
+    }
+    &__officer {
+        &-table {
+            &-supplement {
+                margin-top: 2rem;
+                text-align: right;
+            }
+            width: 100%;
+            margin-top: 1rem;
+            tr {
+                display: grid;
+                grid-template-columns: 30% 68%;
+                gap: 0 2%;
+                width: 100%;
+            }
+            th,td {
+                font-weight: normal;
+                text-align: center;
+                padding: 2em 1rem;
+                border-top: .1rem solid $black;
+            }
+            td {
+                text-align: left;
+            }
+            &-last {
+                th,td {
+                    border-bottom: .1rem solid $black;
+                }
+            }
+        }
+    }
+    &__japan-table {
+        margin-top: 2rem;
+        width: 100%;
+        tr {
+            display: grid;
+            grid-template-columns: 35% 63%;
+            gap: 0 2%;
+            @include mq("md") {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+        th,td {
+            font-weight: normal;
+            padding: 2em 1rem;
+            border-top: .1rem solid $black;
+        }
+        th {
+            @include mq("md") {
+                padding: 2em 1rem 1em;
+            }
+        }
+        td {
+            @include mq("md") {
+                border-top: none;
+                padding: 0 1rem 2em;
+            }
+        }
+        &-last {
+            th,td {
+                border-bottom: .1rem solid $black;
+            }
+            th {
+                @include mq("md") {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}
+
+
+/**********************************************************************
+rules
+**********************************************************************/
+.c-rules {
+    &:nth-child(n+2) {
+        margin-top: 2rem;
+    }
+    &__ttl {
+        font-size: clamp(1.125rem, 1.073rem + 0.22vw, 1.25rem);
+    }
+    &__text {
+        margin-top: 1rem;
+        line-height: 1.6;
+        span {
+            margin: 0 .5rem;
+        }
+        &-detail {
+            display: grid;
+            grid-template-columns: 4rem auto;
+            @include mq("md") {
+                grid-template-columns: 3.4rem auto;
+            }
+        }
+        p + p {
+            margin-top: 0.5em;
+        }
+        &-history {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+}
+
+
+
+/**********************************************************************
+fee
+**********************************************************************/
+.c-fee {
+    &__text {
+        margin-top: 3rem;
+    }
+    &__table {
+        margin-top: 2rem;
+        width: 100%;
+        tbody {
+            display: flex;
+        }
+        tr {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            border: .1rem solid $black;
+            &:nth-child(n+2) {
+                border-left: none;
+            }
+        }
+        th,td {
+            font-weight: normal;
+            width: 100%;
+            text-align: center;
+            padding: 1rem .5rem;
+        }
+        td {
+            border-top: .1rem solid $black;
+        }
+    }
+}
+
+
+/**********************************************************************
+policy
+**********************************************************************/
+.c-policy {
+    &-wrap {
+        margin-top: 3rem;
+        p {
+            margin-top: 1em;
+            line-height: 1.6;
+            a {
+                text-decoration: underline;
+            }
+        }
+        &:nth-child(n+2) {
+            margin-top: 2rem;
+        }
+    }
+    &-ttl {
+        font-size: clamp(1.125rem, 1.073rem + 0.22vw, 1.25rem);
+    }
+    &-contact {
+        margin-top: 3rem;
+        text-align: right;
+    }
+}
+
+
+/**********************************************************************
+login
+**********************************************************************/
+.c-login {
+    &__wrap {
+        width: 30rem;
+        margin: 0 auto;
+        background-color: $glass;
+        padding: 3rem 2rem;
+        border-radius: 2em;
+        @include mq("md") {
+            width: 25rem;
+        }
+        @include mq("sm") {
+            width: 20rem;
+            width: 100%;
+        }
+    }
+    &__ttl {
+        text-align: center;
+    }
+    &__form {
+        display: flex;
+        flex-direction: column;
+        input {
+            padding: 1rem;
+            margin-top: 2rem;
+            border: .1rem solid $black;
+            line-height: 1.6;
+            border-radius: .3em;
+            &:focus {
+                outline: none;
+                border: .1rem solid $light-blue;
+            }
+        }
+    }
+    &__button {
+        width: 6rem;
+        margin: 3rem auto 0;
+        padding: 1rem;
+        background-color: $main-color;
+        color: $white;
+        text-align: center;
+        border-radius: .3em;
+    }
+    &__supplement {
+        margin-top: 1rem;
+        line-height: 1.6;
+        a {
+            text-decoration: underline;
+        }
+    }
+}
+
+
+
+/**********************************************************************
+newsページ
+**********************************************************************/
+.c-news-all {
+    margin-top: 3rem;
+    &__item {
+        a {
+            display: grid;
+            grid-template-columns: 20% 75%;
+            gap: 0 5%;
+            align-items: center;
+            padding: 2rem 1rem;
+            width: 100%;
+            border-top: .1rem solid $black;
+            @include mq("md") {
+                grid-template-columns: 30% 65%;
+            }
+            @media screen and (min-width:1025px) {
+                &:hover .c-news-all__item-img img {
+                    transform: scale(1.1);
+                }
+            }
+        }
+        &-img {
+            overflow: hidden;
+            img {
+                transition: .8s ;
+            }
+        }
+        &-ttl {
+            margin-top: 1rem;
+            font-size: clamp(1.125rem, 1.073rem + 0.22vw, 1.25rem);
+            overflow: hidden;         
+            text-overflow: ellipsis;  
+            white-space: nowrap;
+        }
+        &:last-child {
+            a {
+                border-bottom: .1rem solid $black;
+            }
+        }
+    }
+}
+
+
+/**********************************************************************
+ログイン後のpdf
+**********************************************************************/
+.c-pdf {
+    &__headline {
+        margin-top: 3rem;
+        font-size: clamp(1.25rem, 1.146rem + 0.44vw, 1.5rem);
+    }
+    &__list {
+        display: grid;
+        grid-template-columns: auto 270px;
+        gap: 0 2rem;
+        align-items: center;
+        padding: 2rem 1rem;
+        border-top: .1rem solid $black;
+        @include mq("md") {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 2rem 0;
+            align-items: start;
+            padding: 1rem .5rem;
+        }
+        &:last-child {
+            border-bottom: .1rem solid $black;
+        }
+        &-ttl {
+            margin-bottom: 1rem;
+            font-size: clamp(1.25rem, 1.146rem + 0.44vw, 1.5rem);
+        }
+        &-text {
+            line-height: 1.6;
+        }
+        &-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: .75rem 1.5rem;
+            width: 16.875rem;
+            border: 1px solid $main-color;
+            border-radius: 2em;
+            @include mq("md") {
+                margin: 0 0 0 auto;
+            }
+            @media screen and (min-width:1025px) {
+                &:hover span::before {
+                    animation: arrow linear .8s;
+                }
+            }
+            &-arrow {
+                position: relative;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                background-color: $main-color;
+                overflow: hidden;
+                &::before {
+                    content: "→";
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%,-50%);
+                    color: $white;
+                }
+            }
+        }
+    }
+    &__logout {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .75rem 1.5rem;
+        margin: 0 0 0 auto;
+        width: 16.875rem;
+        border: 1px solid $main-color;
+        border-radius: 2em;
+        background-color: $main-color;
+        color: $white;
+        @media screen and (min-width:1025px) {
+            &:hover span::before {
+                animation: arrow linear .8s;
+            }
+        }
+        &-arrow {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: $white;
+            overflow: hidden;
+            &::before {
+                content: "→";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                color: $main-color;
+            }
+        }
+        &-wrap {
+            margin: 3rem auto 0;
+            max-width: 1080px;
+            width: 90%;
+        }
+    }
+    &__details {
+        margin-top: 2rem;
+        summary {
+            cursor: pointer;
+        }
+    }
+}
+
+.c-tab {
+    &-btn {
+        width: 100%;
+        padding: 1em 1em;
+        background: #f7f7f7;
+        border-top-left-radius: 1em;
+        border-top-right-radius: 1em;
+        cursor: pointer;
+        text-align: center;
+    &.active {
+        background: $main-color;
+        color: $white;
+    }
+    }
+}
+.c-tabs {
+    &-wrapper {
+        margin-top: 2rem;
+    }
+    &-buttons {
+        display: flex;
+        width: 100%;
+    }
+}
+.hidden {
+    display: none;
+}
+
+.c-hospital {
+    &__wrap {
+        padding: 2rem 0;
+    }
+    &__ttl {
+        font-size: clamp(1.25rem, 1.146rem + 0.44vw, 1.5rem);
+    }
+    &__list {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0 2rem;
+        padding: 2rem 1rem;
+        border-top: .1rem solid $black;
+        @include mq("md") {
+            flex-direction: column;
+            align-items: start;
+            gap: 1rem 0;
+        }
+        &:last-child {
+            border-bottom: .1rem solid $black;
+        }
+        &:first-child {
+            margin-top: 1rem;
+        }
+        &-text {
+            display: flex;
+            gap: 0 .5em;
+            line-height: 1.6;
+        }
+    }
+    &__btn {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .75rem 1.5rem;
+        margin: 0 0 0 auto;
+        width: 16.875rem;
+        border: 1px solid $main-color;
+        border-radius: 2em;
+        color: $black;
+        @media screen and (min-width:1025px) {
+            &:hover span::before {
+                animation: arrow linear .8s;
+            }
+        }
+        &-arrow {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: $main-color;
+            overflow: hidden;
+            &::before {
+                content: "→";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                color: $white;
+            }
+        }
+    }
+}
+
+
+/**********************************************************************
+blog
+**********************************************************************/
+.c-blog {
+    &__date {
+        display: block;
+        margin-top: 0.5em;
+        text-align: right;
+    }
+    &__img {
+        display: block;
+        margin-top: 1rem;
+        width: 100%;
+    }
+    &__content {
+        margin-top: 2rem;
+        p {
+            line-height: 1.6;
+            &:nth-child(n+2) {
+                margin-top: 1em;
+            }
+        }
+        a {
+            text-decoration: underline;
+        }
+    }
+}
+
+
+

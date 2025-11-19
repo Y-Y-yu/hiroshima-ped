@@ -1,0 +1,125 @@
+---
+// コンポーネント
+import Layout from '../layouts/Layout.astro';
+
+const title = "お問い合わせ・会員登録";
+const description = "広島県小児科医会のお問い合わせ・会員登録のページです。お気軽にお問い合わせください";
+const url = "https://blog.hiroshima-ped.com/contact";
+const keyword = "お問い合わせ, 会員登録, 入局, 広島, 小児科医会, 広島県, 広島県小児科医会";
+
+// 環境変数からサイトキーを取得
+const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
+---
+
+<Layout title={title} description={description} url={url}>
+	<div class="c-subpage__upper">
+		<div class="c-subpage__upper-ttl">
+			Contact
+		</div>
+		<div class="c-subpage__upper-pagination">
+			<span><a href="/">トップ</a></span>
+			<span></span>
+			<span>お問い合わせ・会員登録</span>
+		</div>
+	</div>
+	<section class="l-subpage">
+		<h1 class="c-subpage__ttl u-font--32">
+			お問い合わせ・会員登録
+		</h1>
+		<div class="c-subpage__subtext u-font--20">
+			<p>
+				入会・変更・退会、その他のお問合せはこちらから。
+			</p>
+		</div>
+		<div class="c-contact__wrap">
+			<form class="c-contact" action="/mail.php" method="post" autocomplete="off">
+				<!-- reCAPTCHA -->
+				<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
+				
+				<div class="c-contact__item">
+					<label class="c-contact__item-label">
+						<span>医籍番号(下4桁)</span>
+						<span class="c-contact__item-label-necessary">必須</span>
+					</label>
+					<input class="c-contact__item-input" type="text" name="id_number" required maxlength="4" pattern="[0-9]{4}" placeholder="例:1234">
+				</div>
+				
+				<div class="c-contact__item">
+					<label class="c-contact__item-label">
+						<span>お名前</span>
+						<span class="c-contact__item-label-necessary">必須</span>
+					</label>
+					<input class="c-contact__item-input" type="text" name="name" required placeholder="例:小児科 太郎">
+				</div>
+				
+				<div class="c-contact__item">
+					<label class="c-contact__item-label">
+						<span>生年月日</span>
+						<span class="c-contact__item-label-necessary">必須</span>
+					</label>
+					<div class="c-contact__item-birthday">
+						<span><input class="c-contact__item-input" type="number" name="birth_year" required min="1900" max="2025" placeholder="1990">年</span>
+						<span><input class="c-contact__item-input" type="number" name="birth_month" required min="1" max="12" placeholder="1">月</span>
+						<span><input class="c-contact__item-input" type="number" name="birth_day" required min="1" max="31" placeholder="1">日</span>
+					</div>
+				</div>
+				
+				<div class="c-contact__item">
+					<label class="c-contact__item-label">
+						<span>メールアドレス</span>
+						<span class="c-contact__item-label-necessary">必須</span>
+					</label>
+					<input class="c-contact__item-input" type="email" name="email" required placeholder="例:pediatric@example.com">
+				</div>
+				
+				<div class="c-contact__item">
+					<label class="c-contact__item-label">
+						<span>お問合せ種別</span>
+						<span class="c-contact__item-label-necessary">必須</span>
+					</label>
+					<div class="c-contact__item-radio-wrap">
+						<input type="radio" name="type" value="入会申込" required checked id="apply">
+						<label for="apply" class="c-contact__item-radio">入会申込</label>
+						<input type="radio" name="type" value="登録内容変更" id="change">
+						<label for="change" class="c-contact__item-radio">登録内容変更</label>
+						<input type="radio" name="type" value="退会申込" id="leave">
+						<label for="leave" class="c-contact__item-radio">退会申込</label>
+						<input type="radio" name="type" value="その他" id="other">
+						<label for="other" class="c-contact__item-radio">その他</label>
+					</div>
+				</div>
+				
+				<div class="c-contact__item">
+					<label class="c-contact__item-label">
+						<span>お問合せ内容</span>
+						<span class="c-contact__item-label-any">任意</span>
+					</label>
+					<textarea class="c-contact__item-textarea" name="message" rows="5"></textarea>
+				</div>
+				
+				<button type="submit" class="c-contact__submit">
+					この内容で送信する<span class="c-contact__submit-arrow"></span>
+				</button>
+			</form>
+		</div>
+	</section>
+
+	<!-- reCAPTCHA v3 -->
+	<script is:inline define:vars={{ siteKey }}>
+		document.addEventListener("DOMContentLoaded", () => {
+			const script = document.createElement("script");
+			script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+			script.onload = () => {
+				if (typeof grecaptcha !== "undefined") {
+					grecaptcha.ready(() => {
+						grecaptcha.execute(siteKey, { action: "submit" }).then((token) => {
+							const input = document.getElementById("g-recaptcha-response");
+							if (input) input.value = token;
+						});
+					});
+				}
+			};
+			document.body.appendChild(script);
+		});
+	</script>
+</Layout>

@@ -1,0 +1,152 @@
+@use "../global/forwards" as *;
+
+/**********************************************************************
+背景
+**********************************************************************/
+.l-bg {
+    position: relative;
+    &::after {
+        content: "";
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: -1;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient( -45deg, #4DA6A6 0%, #5BA9D9 50%, #A7D3E6 100%);
+        opacity: 50%;
+    }
+}
+
+
+
+/**********************************************************************
+header
+**********************************************************************/
+.l-header {
+    position: fixed;
+    top: 1.5rem;
+    left: 50%;
+    z-index: 100;
+    transform: translateX(-50%);
+    padding: 0 4.5rem ;
+    margin: 0 auto;
+    max-width: 1920px;
+    width: 100%;
+    @include mq("2xl") {
+        padding: 0 3rem;
+    }
+    @include mq("xl") {
+        padding: 0 2.5rem;
+    }
+    @include mq("lg") {
+        padding: 0 2rem;
+    }
+    @include mq("md") {
+        padding: 0 1.5rem;
+    }
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+
+/**********************************************************************
+footer
+**********************************************************************/
+.l-footer {
+    margin: 16rem auto 0;
+    padding: 0 4.5rem ;
+    width: 100%;
+    max-width: 1920px;
+    color: $white;
+    @include mq("2xl") {
+        padding: 0 3rem;
+    }
+    @include mq("xl") {
+        padding: 0 2.5rem;
+    }
+    @include mq("lg") {
+        padding: 0 2rem;
+    }
+    @include mq("md") {
+        padding: 0 1.5rem;
+    }
+    @include mq("sm") {
+        padding: 0;
+    }
+    &__inner {
+        padding: 7.5rem 10rem;
+        width: 100%;
+        background-color: $main-color;
+        border-top-left-radius: 2em;
+        border-top-right-radius: 2em;
+        @include mq("2xl") {
+            padding: 7.5rem 11.25vw;
+        }
+        @include mq("xl") {
+            padding: 7.5rem 3rem;
+        }
+        @include mq("lg") {
+            padding: 7.5rem 2rem;
+        }
+        @include mq("md") {
+            padding: 4.5rem 1.5rem;
+        }
+    }
+}
+
+
+
+/**********************************************************************
+kv
+**********************************************************************/
+.l-kv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100dvh;
+}
+
+/**********************************************************************
+about
+**********************************************************************/
+.l-about {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 3rem;
+}
+
+/**********************************************************************
+members
+**********************************************************************/
+.l-members {
+    margin: 10rem auto 0;
+    max-width: 1080px;
+    width: 90%;
+}
+
+
+/**********************************************************************
+news
+**********************************************************************/
+.l-news {
+    margin: 10rem auto 0;
+    max-width: 1080px;
+    width: 90%;
+}
+
+
+/**********************************************************************
+subpage
+第二階層以下
+**********************************************************************/
+.l-subpage {
+    margin: 5rem auto 0;
+    max-width: 1080px;
+    width: 90%;
+}
+

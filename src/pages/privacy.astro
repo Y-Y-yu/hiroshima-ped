@@ -1,0 +1,81 @@
+---
+
+// コンポーネント
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/card.astro';
+
+const title = "プライバシーポリシー";
+const description = "広島県小児科医会のプライバシーです。";
+const url = "https://blog.hiroshima-ped.com/privacy";
+const keyword = "プライバシーポリシー";
+
+
+//画像
+
+---
+
+<Layout title={title} description={description} url={url}>
+    <main>
+        <div class="c-subpage__upper">
+            <div class="c-subpage__upper-ttl">
+                Privacy Policy
+            </div>
+            <div class="c-subpage__upper-pagination">
+                <span><a href="/">トップ</a></span>
+                <span></span>
+                <span>プライバシーポリシー</span>
+            </div>
+        </div>
+        <section class="l-subpage">
+            <h1 class="c-subpage__ttl u-font--32">
+                プライバシーポリシー
+            </h1>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    1. 個人情報の取扱いについて
+                </h2>
+                <p>
+                    本サイトで取得した個人情報（氏名・メールアドレスなど）は、本会の運営目的の範囲内でのみ使用し、本人の同意なく第三者に提供または他の目的に利用することはありません。<br>
+                    ただし、法令に基づき開示が求められた場合を除きます。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    2. Google アナリティクスの利用について
+                </h2>
+                <p>
+                    本サイトでは、サービス向上のために Google 社の「Google アナリティクス」を利用しています。Google アナリティクスは Cookie を使用してアクセス情報を収集します。この情報は匿名で収集され、個人を特定するものではありません。収集されたデータは Google 社のプライバシーポリシーに基づいて管理されます。<br>
+                    詳細は<a href="https://policies.google.com/privacy?hl=ja" target="_blank">Google プライバシーポリシー</a>をご覧ください。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    3. reCAPTCHA の利用について
+                </h2>
+                <p>
+                    本サイトでは、不正アクセスやスパム送信防止のために Google の reCAPTCHA を使用しています。reCAPTCHA は、Google のプライバシーポリシーおよび利用規約に基づいて動作します。利用者は本機能の使用により、Google のこれらの規約に同意したものとみなされます。<br>
+                    詳細は<a href="https://policies.google.com/privacy?hl=ja" target="_blank">Google プライバシーポリシー</a>および<a href="https://policies.google.com/terms?hl=ja" target="_blank">Google 利用規約</a>をご確認ください。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    4. Cookie（クッキー）の使用について
+                </h2>
+                <p>
+                    本サイトでは、より良いサービス提供のため Cookie を使用しています。Cookie は利用者の端末に保存される小さなデータで、個人を特定するものではありません。Cookie の使用を希望しない場合は、ブラウザの設定で無効にすることができます。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    5. 個人情報の管理
+                </h2>
+                <p>
+                    本会は、取得した個人情報を適切に管理し、外部からの不正アクセスや漏えいを防止するために必要な安全対策を講じます。
+                </p>
+            </div>
+            <div class="c-policy-contact">
+                ホームページ管理委員会
+            </div>
+        </section>
+    </main>
+</Layout>

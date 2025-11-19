@@ -1,0 +1,172 @@
+---
+// コンポーネント
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/card.astro';
+
+const title = "";
+const description = "広島県小児科医会のホームページです。";
+const url = "https://blog.hiroshima-ped.com";
+const keyword = "広島県小児科医会, 広島県, 広島, 小児科, 小児科医会, ホームページ, 会員登録, 入局";
+
+
+//画像
+
+
+const WP_BASE = "https://blog.hiroshima-ped.com/wp/wp-json/wp/v2";
+
+// =====================
+// 型定義
+// =====================
+type WPPost = {
+  id: number;
+  slug: string;
+  date: string;
+  title: { rendered: string };
+  _embedded?: any;
+  featured_image_url?: string | null;
+};
+
+// =====================
+// 投稿取得（ビルド時に fetch）
+// =====================
+let posts: WPPost[] = [];
+
+try {
+  const res = await fetch(`${WP_BASE}/posts?_embed&per_page=3`);
+  if (res.ok) {
+    posts = await res.json();
+  }
+} catch (err) {
+  console.error("Failed to fetch posts:", err);
+}
+
+---
+
+<Layout title={title} description={description} url={url}>
+	 <main class="top">
+		<section class="l-kv">
+		<h1 class="c-kv__text">
+			<span class="c-kv__text--eng">
+				Hiroshima<br class="u-md--visible"> Pediatric<br class="u-md--visible"> Association
+			</span>
+			<span class="c-kv__text--jp">
+				広島県小児科医会
+			</span>
+		</h1>
+		</section>
+		<section class="l-about">
+		<div class="c-about__slide">
+			<div class="c-about__slide-text">
+				About us  About us  About us
+			</div>
+			<div class="c-about__slide-text">
+				About us  About us  About us
+			</div>
+		</div>
+		<div class="c-about__box">
+			<h2 class="c-about__box-ttl">
+				広島県小児科医会について
+			</h2>
+			<div class="c-about__box-text u-font--20">
+				子どもたちの健康を守るために活動する小児科医会のご紹介です。
+			</div>
+			<div class="c-about__box-btn u-font--20">
+				<a href="/about/message">会長挨拶<span></span></a>
+			</div>
+			<div class="c-about__box-btn u-font--20">
+				<a href="/about/team">組織・役員<span></span></a>
+			</div>
+		</div>
+		</section>
+		<section class="l-members">
+			<div class="c-members__accent-ttl">
+				Members
+			</div>
+			<h2 class="c-members__ttl u-font--32">
+				入会案内・会員ページ
+			</h2>
+			<div class="c-members__text u-font--20">
+				入会を希望される先生へのご案内と、会員専用の情報ページです
+			</div>
+			<div class="c-members__box">
+				<Card cardTtl="会則" cardText="医会の基本方針と運営ルールをまとめています。" Link="/join/rules" />
+				<Card cardTtl="会費" cardText="入会に必要な年会費や納入方法をご案内します。" Link="/join/fee" />
+				<Card cardTtl="会員登録" cardText="入会をご希望の先生はこちらからお手続きください。" Link="/contact" />
+				<Card cardTtl="会員ページ" cardText="会員専用の情報ページです。" Link="/members" />
+			</div>
+		</section>
+		<section class="l-news">
+			<div class="c-news__accent-ttl">
+				News
+			</div>
+			<div class="c-news__ttl u-font--32">
+				お知らせ
+			</div>
+<div class="c-news__lists" id="news-container">
+  <p>読み込み中...</p>
+</div>
+
+<script type="module">
+  const container = document.getElementById("news-container");
+  const baseUrl = "https://blog.hiroshima-ped.com"; // WordPress サイトの絶対 URL
+
+  // 非同期で最新3件を取得
+  async function loadNews() {
+    try {
+      const res = await fetch(`${baseUrl}/wp/wp-json/wp/v2/posts?_embed&per_page=3`);
+      const posts = await res.json();
+
+      if (!posts.length) {
+        container.innerHTML = '<p>お知らせはありません</p>';
+        return;
+      }
+
+      container.innerHTML = posts.map(post => {
+        const postTitle = post.title.rendered;
+        const date = new Date(post.date).toLocaleDateString("ja-JP");
+
+        // サムネイル取得
+        let thumbnail = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url 
+                        || post.featured_image_url || "";
+        if (thumbnail.startsWith("/")) thumbnail = baseUrl + thumbnail;
+
+        // リンク先を /news/投稿名 に変更
+        const postLink = `${baseUrl}/news/${post.slug}`;
+
+        return `
+          <a href="/news/${post.id}" class="c-news__list">
+            ${thumbnail 
+              ? `<div class="c-news__list-img"><img src="${thumbnail}" alt="${postTitle}" loading="lazy"></div>` 
+              : `<div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500">No Image</div>`}
+            <div>
+              <p>${date}</p>
+              <div class="c-news__list-ttl">${postTitle}</div>
+            </div>
+          </a>
+        `;
+      }).join('');
+
+    } catch (err) {
+      container.innerHTML = '<p>お知らせの取得に失敗しました</p>';
+      console.error(err);
+    }
+  }
+
+  loadNews();
+</script>
+
+			<div class="c-news__btn-wrap">
+				<a class="c-news__btn" href="/news">
+					お知らせ一覧を見る<span class="c-news__btn-arrow"></span>
+				</a>
+			</div>
+			<div class="c-news__box">
+				<Card cardTtl="日本小児科医会 フォーラム・セミナー情報" cardText="日本小児科医会のイベント・研修会情報です。" Link="https://www.jpa-web.org/seminar_conference/detail01.html" target="_blank" />
+				<Card cardTtl="Youtube" cardText="動画での活動紹介や医療情報を発信しています。" Link="https://www.youtube.com/@%E5%BA%83%E5%B3%B6%E7%9C%8C%E5%B0%8F%E5%85%90%E7%A7%91%E5%8C%BB%E4%BC%9A" target="_blank" />
+			</div>
+		</section>
+	</main> 
+</Layout>
+
+
+

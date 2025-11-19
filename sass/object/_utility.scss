@@ -1,0 +1,108 @@
+@use "../global/forwards" as *;
+
+
+
+/**********************************************************************
+font
+**********************************************************************/
+.u-font {
+    &--32 {
+        font-size: clamp(1.5rem, 1.293rem + 0.88vw, 2rem);
+    }
+    &--20 {
+        font-size: clamp(1.125rem, 1.073rem + 0.22vw, 1.25rem);
+    }
+    &--16 {
+        font-size: clamp(0.875rem, 0.823rem + 0.22vw, 1rem);
+    }
+    &--12 {
+        font-size: clamp(0.625rem, 0.573rem + 0.22vw, 0.75rem);
+    }
+}
+
+
+/**********************************************************************
+改行
+**********************************************************************/
+.u-md--visible {
+    display: none;
+    @include mq("md") {
+        display: block;
+    }
+}
+
+
+/**********************************************************************
+animation
+**********************************************************************/
+//button
+@keyframes arrow {
+    0% {
+        left: 50%;
+    }
+    45% {
+        left: 150%;
+        opacity: 1;
+    }
+    46% {
+    left: -150%;
+        opacity: 0;
+    }
+    55% {
+        left: -150%;
+        opacity: 1;
+    }
+    100% {
+        left: 50%;
+    }
+}
+
+//slide
+@keyframes slide-text {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+@keyframes slide-text2 {
+    0% {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-200%);
+    }
+}
+
+
+.u-btn-arrow {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: $main-color;
+    @media screen and (min-width:1025px) {
+        &:hover::after {
+            animation: arrow .8s ease;
+        }
+    }
+    &::after {
+        content: "→";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        animation: arrow .8s ease;
+        color: $white;
+    }
+}
+
+
+
+
+

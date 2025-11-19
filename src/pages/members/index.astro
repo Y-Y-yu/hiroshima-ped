@@ -1,0 +1,157 @@
+---
+export const prerender = false;
+import { getSession } from "../../lib/session.js";
+import Layout from "../../layouts/Layout.astro";
+
+const title = "会員ページ";
+const description = "広島県小児科医会の会員専用のページです。会報や会員の先生のホームページはこちらからご覧になれます。";
+const url = "https://blog.hiroshima-ped.com/members";
+const keyword = "広島県小児科医会, 広島県, 広島, 小児科医会, 小児科, 会員ページ";
+
+// セッションチェック(Astro.cookiesを使用)
+const session = getSession(Astro.cookies);
+
+// セッションがない、またはログインしていない場合はログインへリダイレクト
+if (!session || !session.loggedIn) {
+  return Astro.redirect("/members/login");
+}
+
+import pdfs from "../../data/pdfs.json";
+import { hospitals, type Hospital } from "../../data/hospitals";
+
+const grouped = hospitals.reduce((acc, h) => {
+  (acc[h.area] ??= []).push(h);
+  return acc;
+}, {} as Record<string, Hospital[]>);
+---
+
+<Layout title={title} description={description} url={url}>
+  <main>
+    <div class="c-subpage__upper">
+      <div class="c-subpage__upper-ttl">
+        Member area
+      </div>
+      <div class="c-subpage__upper-pagination">
+        <span><a href="/">トップ</a></span>
+        <span></span>
+        <span>会員専用ページ</span>
+      </div>
+    </div>
+    <form id="logout-form" class="c-pdf__logout-wrap">
+      <button type="submit" class="c-pdf__logout">ログアウト<span class="c-pdf__logout-arrow"></span></button>
+    </form>
+    <section class="l-subpage">
+      <h1 class="c-subpage__ttl u-font--32">
+        会員専用ページ
+      </h1>
+      <div id="tabs" class="c-tabs-wrapper">
+        <div class="c-tabs-buttons">
+          <button class="c-tab-btn active" data-tab="1">会報</button>
+          <button class="c-tab-btn" data-tab="2">会員ホームページ</button>
+        </div>
+        <div class="c-tabs-panels">
+          <div class="c-tab-panel panel-1">
+            <ul class="c-pdf__lists">
+              {[...pdfs].reverse().map(pdf => (
+                <li class="c-pdf__list">
+                  <div class="c-pdf__text">
+                    <h3 class="c-pdf__list-ttl">{pdf.title}</h3>
+                    <p class="c-pdf__list-text" style="white-space: pre-line;">
+                      {pdf.description}
+                    </p>
+                  </div>
+                  <a href={`/api/pdf/${pdf.filename}`} class="c-pdf__list-btn" target="_blank">
+                    ダウンロード<span class="c-pdf__list-btn-arrow"></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class="c-tab-panel panel-2 hidden">
+            {Object.entries(grouped).map(([area, list]) => (
+              <div class="c-hospital__wrap">
+                <h2 class="c-hospital__ttl">{area}</h2>
+                <ul class="c-hospital__lists">
+                  {list.map(h => (
+                    <li class="c-hospital__list">
+                      <div class="c-hospital__list-text">
+                        {h.name}<br />
+                        {h.address}
+                      </div>
+                      <a href={h.url} class="c-hospital__btn" target="_blank">公式サイト<span class="c-hospital__btn-arrow"></span></a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <script>
+    const form = document.getElementById("logout-form");
+    form?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
+        await fetch("/api/logout", { method: "POST" });
+        window.location.href = "/members/login";
+      } catch (error) {
+        console.error("Logout error:", error);
+        window.location.href = "/members/login";
+      }
+    });
+  </script>
+
+  <script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+      const root = document.getElementById("tabs");
+      const buttons = root.querySelectorAll(".c-tab-btn");
+      const p1 = root.querySelector(".panel-1");
+      const p2 = root.querySelector(".panel-2");
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const tab = btn.dataset.tab;
+
+          buttons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+
+          if (tab === "1") {
+            p1.classList.remove("hidden");
+            p2.classList.add("hidden");
+          } else {
+            p2.classList.remove("hidden");
+            p1.classList.add("hidden");
+          }
+        });
+      });
+    });
+  </script>
+<!-- 自動ログアウトスクリプト(新規追加) -->
+<script>
+  // 30分(1800秒)無操作でログアウト
+  let timeout: ReturnType<typeof setTimeout>;
+  const TIMEOUT_DURATION = 30 * 60 * 1000; // 30分(ミリ秒)
+
+  function resetTimeout() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      alert('セッションがタイムアウトしました。再度ログインしてください。');
+      fetch('/api/logout', { method: 'POST' }).then(() => {
+        window.location.href = '/members/login';
+      });
+    }, TIMEOUT_DURATION);
+  }
+
+  // ユーザーの操作を検知してタイマーをリセット
+  const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+  events.forEach(event => {
+    document.addEventListener(event, resetTimeout, true);
+  });
+
+  // 初期化
+  resetTimeout();
+</script>
+</Layout>

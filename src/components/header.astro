@@ -1,0 +1,46 @@
+---
+import Ham from './ham'
+
+// 画像インポート
+import logoSymbol from '../../public/favicon.ico'
+---
+
+<header class="l-header" id="js-header">
+    <div class="l-header__inner">
+        <a class="c-header__logo" href="/">
+            <div class="c-header__logo-symbol">
+                <img src={logoSymbol} alt="広島県小児科医会">
+            </div>
+            <div class="c-header__logo-text">
+                広島県小児科医会
+            </div>
+        </a>
+        <nav class="c-header__nav">
+            <ul class="c-header__nav-lists u-font--20">
+                <li class="c-header__nav-list">
+                    <a href="/">トップ</a>
+                </li>
+                <li class="c-header__nav-list">
+                    <a href="/about">広島県小児科医会について</a>
+                </li>
+                <li class="c-header__nav-list">
+                    <a href="/join">入会案内</a>
+                </li>
+                <li class="c-header__nav-list">
+                    <a href="/members">会員ページ</a>
+                </li>
+                <li class="c-header__nav-list">
+                    <a href="/news">お知らせ</a>
+                </li>
+                <li class="c-header__nav-list">
+                    <a href="/contact">お問い合わせ</a>
+                </li>
+            </ul>
+            <div class="c-header__nav-btn">
+                <a href="/contact">会員登録</a>
+            </div>
+            <Ham client:load />
+        </nav>
+    </div>
+</header>
+

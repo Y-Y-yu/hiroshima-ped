@@ -1,0 +1,59 @@
+---
+
+// コンポーネント
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/card.astro';
+
+const title = "会費";
+const description = "広島県小児科医会の会費のページです。会員の年会費はそれぞれ、A会員は12,000円、B・C会員は5,000円です。";
+const url = "https://blog.hiroshima-ped.com/join/fee";
+const keyword = "広島県小児科医会, 広島県, 広島, 小児科医, 小児科, 会費";
+
+
+//画像
+
+---
+
+<Layout title={title} description={description} url={url}>
+
+	<div class="c-subpage__upper">
+		<div class="c-subpage__upper-ttl">
+			Fee
+		</div>
+		<div class="c-subpage__upper-pagination">
+			<span><a href="/">トップ</a></span>
+			<span></span>
+			<span><a href="/join">入会案内</a></span>
+			<span></span>
+			<span>会費</span>
+		</div>
+	</div>
+	<section class="l-subpage">
+		<h1 class="c-subpage__ttl u-font--32">
+			会費
+		</h1>
+        <div class="c-fee__text">
+            年会費
+        </div>
+        <table class="c-fee__table">
+            <tbody>
+                <tr>
+                    <th>区分</th>
+                    <td>金額</td>
+                </tr>
+                <tr>
+                    <th>A会員</th>
+                    <td>12,000円</td>
+                </tr>
+                <tr>
+                    <th>B会員</th>
+                    <td>5,000円</td>
+                </tr>
+                <tr>
+                    <th>C会員</th>
+                    <td>5,000円</td>
+                </tr>
+            </tbody>
+        </table>
+	</section>
+</Layout>

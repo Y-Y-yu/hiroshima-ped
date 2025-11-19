@@ -1,0 +1,44 @@
+---
+
+// コンポーネント
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/card.astro';
+
+const title = "入会案内";
+const description = "広島県小児科医会の入会案内のページです。会則や組織・役員について知ることができます。";
+const url = "https://blog.hiroshima-ped.com/join";
+const keyword = "広島県小児科医会, 広島県, 広島, 小児科医会, 小児科, 入会案内";
+
+
+//画像
+
+---
+
+<Layout title={title} description={description} url={url}>
+
+	<div class="c-subpage__upper">
+		<div class="c-subpage__upper-ttl">
+			Join us
+		</div>
+		<div class="c-subpage__upper-pagination">
+			<span><a href="/">トップ</a></span>
+			<span></span>
+			<span>入会案内</span>
+		</div>
+	</div>
+	<section class="l-subpage">
+		<h1 class="c-subpage__ttl u-font--32">
+			入会案内
+		</h1>
+		<div class="c-subpage__subtext u-font--20">
+			<p>
+				入会を希望される先生へのご案内です。
+			</p>
+		</div>
+		<div class="c-subpage__nav-box">
+			<Card cardTtl="会則" cardText="医会の基本方針と運営ルールをまとめています。" Link="/join/rules" />
+			<Card cardTtl="会費" cardText="入会に必要な年会費や納入方法をご案内します。" Link="/join/fee" />
+			<Card cardTtl="会員登録" cardText="入会を希望の先生はこちらからお手続きください" Link="/contact" />
+		</div>
+	</section>
+</Layout>

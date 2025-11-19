@@ -1,0 +1,58 @@
+---
+
+// コンポーネント
+import Layout from '../../layouts/Layout.astro';
+
+const title = "会長挨拶";
+const description = "広島県小児科医会の会長挨拶のページです。";
+const url = "https://blog.hiroshima-ped.com/about/message";
+const keyword = "広島県小児科医会, 広島, 広島県, 小児科, 小児科医会, 小児科医, 会長挨拶";
+
+
+//画像
+
+---
+
+<Layout title={title} description={description} url={url}>
+	<div class="c-subpage__upper">
+		<div class="c-subpage__upper-ttl">
+			Message
+		</div>
+		<div class="c-subpage__upper-pagination">
+			<span><a href="/">トップ</a></span>
+			<span></span>
+			<span><a href="/about">広島県小児科医会について</a></span>
+			<span></span>
+			<span>会長挨拶</span>
+		</div>
+	</div>
+    <section class="l-subpage">
+		<h1 class="c-subpage__ttl u-font--32">
+			会長挨拶
+		</h1>
+        <div class="c-message">
+            <p>
+                広島県小児科医会は、昭和56年7月に小児医療の向上、医療経営の合理化、会員相互の親睦をはかり、もって小児の心身の健全な発達と人格形成に寄与することを目的に創設し、臨床の研鑽を行い、より良い小児科診療の提供と地域の小児保健・公衆衛生の向上のために活動を続けています。本会は県内の開業医と勤務医の小児科医により構成しています。
+            </p>
+            <p>
+                小児医療は、急速に進む少子化、新型コロナをはじめとする感染対策や予防接種、救急医療、小児アレルギー、発達障害、不登校など心の問題、医療的ケア児の在宅医療など幾つもの課題を抱えています。
+            </p>
+            <p>
+                これらに対し本会では講演会・研修会の開催や乳幼児健診・学校保健、予防接種・感染対策、小児アレルギー、子どもの心、小児在宅医療推進など各種委員会活動を通して会員が良質な小児科診療を提供できるように支援しています。
+            </p>
+            <p>
+                また、医師会や自治体とともに小児救急医療、予防接種をはじめとした感染対策、乳幼児健康診査、学校保健など医療・保健活動へ参加・協力し、地域の公衆衛生の維持向上に努めています。
+            </p>
+            <p>
+                今の、そして10年、20年先の広島の子どもたちみんなが笑顔で育つように、会員一同で診療や子育て支援、そして地域での様々な小児保健活動に取り組んでおります。
+            </p>
+            <p>
+                広島県小児科医会の事業にご指導、ご協力を賜りますようにお願い申し上げます。
+            </p>
+            <p>
+                広島県小児科医会会長<span class="c-message-sign">森 美喜夫</span><br>
+                2023年1月記
+            </p>
+        </div>
+	</section>
+</Layout>

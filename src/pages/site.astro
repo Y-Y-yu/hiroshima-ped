@@ -1,0 +1,86 @@
+---
+
+// コンポーネント
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/card.astro';
+
+const title = "サイトポリシー";
+const description = "広島県小児科医会のサイトポリシーです。";
+const url = "https://blog.hiroshima-ped.com/site";
+const keyword = "サイトポリシー";
+
+
+//画像
+
+---
+
+<Layout title={title} description={description} url={url}>
+    <main>
+        <div class="c-subpage__upper">
+            <div class="c-subpage__upper-ttl">
+                Site Policy
+            </div>
+            <div class="c-subpage__upper-pagination">
+                <span><a href="/">トップ</a></span>
+                <span></span>
+                <span>サイトポリシー</span>
+            </div>
+        </div>
+        <section class="l-subpage">
+            <h1 class="c-subpage__ttl u-font--32">
+                サイトポリシー
+            </h1>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    1. 本サイトの運営について
+                </h2>
+                <p>
+                    本サイトは広島県小児科医会（以下「本会」といいます）が運営しています。<br>
+                    本サイトに掲載された情報は、本会および本会会員の活動を目的として提供するものであり、利用者は以下の条件に同意のうえご利用ください。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    2. 著作権について
+                </h2>
+                <p>
+                    本サイトに掲載されている文章・画像・資料等の著作権は、本会または正当な権利を有する第三者に帰属します。<br>
+                    これらの内容を、無断で複製・転載・配布・改変などすることを禁止します。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    3. 情報の利用について
+                </h2>
+                <p>
+                    本サイトに掲載された情報は、個人または会員による利用に限ります。<br>
+                    本会以外の第三者が、ホームページ管理委員会の許可なくこれらの情報を使用することを禁止します。<br>
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    4. 免責事項
+                </h2>
+                <p>
+                    本会は、本サイトに掲載する情報の正確性や安全性について細心の注意を払っていますが、その内容を保証するものではありません。<br>
+                    利用者が本サイトの情報を利用したことにより生じたいかなる損害についても、本会は一切の責任を負いません。<br>
+                    また、予告なく内容の変更または削除を行う場合があります。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                    5. リンクについて
+                </h2>
+                <p>
+                    本サイトへのリンクは、営利を目的とせず本会の趣旨に反しない限り、原則自由です。<br>
+                    ただし、内容やリンク方法によっては、リンクの削除をお願いする場合があります。
+                </p>
+            </div>
+            <div class="c-policy-wrap">
+                <h2 class="c-policy-ttl">
+                </h2>
+                <p></p>
+            </div>
+        </section>
+    </main>
+</Layout>

@@ -1,0 +1,43 @@
+@use "../global/forwards" as *;
+
+html {
+    height: 100%;
+    width: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar{
+    display:none;
+    }
+}
+
+body {
+    margin: 0 auto;
+    color: $text-black;
+    font-family: $font-family;
+    font-weight: 400;
+    letter-spacing: 0.5%;
+    line-height: 1;
+    font-size: clamp(0.875rem, 0.823rem + 0.22vw, 1rem);
+    overflow-x: hidden;
+}
+
+img, svg {
+    height: 100%;
+    width: 100%;
+    -o-object-fit: contain;
+    object-fit: contain;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+    font-feature-settings: "palt";
+}
+
+.no-scroll {
+    overflow: hidden;
+}

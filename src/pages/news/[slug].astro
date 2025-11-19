@@ -1,0 +1,106 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+export const prerender = true;
+
+// =====================
+// 型定義
+// =====================
+type WPPost = {
+  id: number;
+  slug: string;
+  date: string;
+  title: { rendered: string };
+  content: { rendered: string };
+  _embedded?: {
+    ["wp:featuredmedia"]?: {
+      source_url: string;
+    }[];
+  };
+};
+
+// =====================
+// getStaticPaths
+// =====================
+export async function getStaticPaths() {
+  const WP_BASE = import.meta.env.VITE_WP_BASE; // ←ここに移動
+
+  if (!WP_BASE) {
+    console.error("❌ VITE_WP_BASE is not defined");
+    return [];
+  }
+
+  try {
+    const res = await fetch(`${WP_BASE}/posts?per_page=100&_embed`);
+    if (!res.ok) return [];
+
+    const posts: WPPost[] = await res.json();
+
+return posts.map((post) => ({
+  params: { slug: String(post.id) }, // ← slug を数字 ID にする
+  props: { post },
+}));
+  } catch (err) {
+    console.error("❌ getStaticPaths error:", err);
+    return [];
+  }
+}
+
+// =====================
+// getStaticPaths → props
+// =====================
+const { post } = Astro.props;
+
+// =====================
+// アイキャッチ取得
+// =====================
+let imageUrl =
+  post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? "";
+
+// =====================
+// ページメタ情報
+// =====================
+const title = post?.title.rendered ?? "Post";
+const description = post?.title.rendered ?? "";
+const url = `/news/${post?.slug}`;
+---
+
+<Layout title={title} description={description} url={url}>
+    <div class="c-subpage__upper">
+    <div class="c-subpage__upper-ttl">
+      News
+    </div>
+    <div class="c-subpage__upper-pagination">
+      <span><a href="/">トップ</a></span>
+      <span></span>
+      <span><a href="/news">お知らせ</a></span>
+    </div>
+  </div>
+  <section class="l-subpage">
+    {post ? (
+      <article class="c-news-single">
+        <h1 class="c-subpage__ttl u-font--32" set:html={post.title.rendered}></h1>
+
+        <time datetime={post.date} class="c-blog__date">
+          {new Date(post.date).toLocaleDateString("ja-JP")}
+        </time>
+
+        {imageUrl && (
+          <img
+            src={imageUrl}
+            alt={post.title.rendered}
+            class="c-blog__img"
+            loading="lazy"
+          />
+        )}
+
+        <div
+          class="c-blog__content post-content"
+          set:html={post.content.rendered}
+        ></div>
+      </article>
+    ) : (
+      <p>記事が見つかりませんでした。</p>
+    )}
+  </section>
+</Layout>

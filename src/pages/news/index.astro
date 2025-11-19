@@ -1,0 +1,75 @@
+---
+const WP_BASE = 'https://blog.hiroshima-ped.com/wp';
+
+import Layout from "../../layouts/Layout.astro";
+
+const title = "お知らせ";
+const description = "広島県小児科医会のお知らせ一覧です。";
+const url = "https://blog.hiroshima-ped.com/news";
+const keyword = "広島県小児科医会, 広島, 広島県, 小児科医会, お知らせ";
+
+// WordPress REST APIから投稿を取得
+const res = await fetch(`${WP_BASE}/wp-json/wp/v2/posts?per_page=20&_embed`);
+type WPPost = {
+  id: number;
+  slug: string;
+  date: string;
+  title: { rendered: string };
+  _embedded?: {
+    'wp:featuredmedia'?: {
+      source_url: string;
+    }[];
+  };
+};
+
+
+const posts: WPPost[] = await res.json();
+
+---
+
+<Layout title={title} description={description} url={url}>
+  <div class="c-subpage__upper">
+    <div class="c-subpage__upper-ttl">
+      News
+    </div>
+    <div class="c-subpage__upper-pagination">
+      <span><a href="/">トップ</a></span>
+      <span></span>
+      <span>お知らせ</span>
+    </div>
+  </div>
+  <section class="l-subpage">
+    <h1 class="c-subpage__ttl u-font--32">
+      ニュース一覧
+    </h1>
+    <ul class="c-news-all">
+          {posts.map((post) => (
+            <li class="c-news-all__item">
+              <a href={`/news/${post.id}`} style="text-decoration:none; color:#333;">
+                <div class="c-news-all__item-img">
+                {post._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
+                <img
+                  src={
+                  post._embedded['wp:featuredmedia'][0].source_url.startsWith('http')
+                  ? post._embedded['wp:featuredmedia'][0].source_url
+                  : `https://blog.hiroshima-ped.com${post._embedded['wp:featuredmedia'][0].source_url}`
+                  }
+                alt={post.title.rendered}
+                />
+                )}
+                </div>
+                <div class="c-news-all__item-text">
+                  <time datetime={post.date}>
+                    {new Date(post.date).toLocaleDateString('ja-JP')}
+                  </time>
+                  <div class="c-news-all__item-ttl" set:html={post.title.rendered}></div>
+                </div>
+              </a>
+            </li>
+          ))}
+    </ul>
+  </section>
+  
+</Layout>
+
+
