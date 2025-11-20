@@ -32,7 +32,7 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 			</p>
 		</div>
 		<div class="c-contact__wrap">
-			<form class="c-contact" action="/mail.php" method="post" autocomplete="off">
+			<form id="contactForm" class="c-contact" action="/mail_new.php" method="post" autocomplete="off">
 				<!-- reCAPTCHA -->
 				<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
 				
@@ -41,7 +41,8 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 						<span>医籍番号(下4桁)</span>
 						<span class="c-contact__item-label-necessary">必須</span>
 					</label>
-					<input class="c-contact__item-input" type="text" name="id_number" required maxlength="4" pattern="[0-9]{4}" placeholder="例:1234">
+					<input id="id_number" class="c-contact__item-input" type="text" name="id_number" required maxlength="4" pattern="[0-9]{4}" placeholder="例:1234">
+					<div id="error-id_number" class="c-contact__item-error"></div>
 				</div>
 				
 				<div class="c-contact__item">
@@ -49,7 +50,8 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 						<span>お名前</span>
 						<span class="c-contact__item-label-necessary">必須</span>
 					</label>
-					<input class="c-contact__item-input" type="text" name="name" required placeholder="例:小児科 太郎">
+					<input id="name" class="c-contact__item-input" type="text" name="name" required placeholder="例:小児科 太郎">
+					<div id="error-name" class="c-contact__item-error"></div>
 				</div>
 				
 				<div class="c-contact__item">
@@ -58,10 +60,11 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 						<span class="c-contact__item-label-necessary">必須</span>
 					</label>
 					<div class="c-contact__item-birthday">
-						<span><input class="c-contact__item-input" type="number" name="birth_year" required min="1900" max="2025" placeholder="1990">年</span>
-						<span><input class="c-contact__item-input" type="number" name="birth_month" required min="1" max="12" placeholder="1">月</span>
-						<span><input class="c-contact__item-input" type="number" name="birth_day" required min="1" max="31" placeholder="1">日</span>
+						<span><input id="birth_year" class="c-contact__item-input" type="number" name="birth_year" required min="1900" max="2025" placeholder="1990">年</span>
+						<span><input id="birth_month" class="c-contact__item-input" type="number" name="birth_month" required min="1" max="12" placeholder="1">月</span>
+						<span><input id="birth_day" class="c-contact__item-input" type="number" name="birth_day" required min="1" max="31" placeholder="1">日</span>
 					</div>
+					<div id="error-birthday" class="c-contact__item-error"></div>
 				</div>
 				
 				<div class="c-contact__item">
@@ -69,7 +72,8 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 						<span>メールアドレス</span>
 						<span class="c-contact__item-label-necessary">必須</span>
 					</label>
-					<input class="c-contact__item-input" type="email" name="email" required placeholder="例:pediatric@example.com">
+					<input id="email" class="c-contact__item-input" type="email" name="email" required placeholder="例:pediatric@example.com">
+					<div id="error-email" class="c-contact__item-error"></div>
 				</div>
 				
 				<div class="c-contact__item">
@@ -104,6 +108,21 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 		</div>
 	</section>
 
+	<!-- エラーメッセージのスタイル -->
+	<style>
+		.c-contact__item-error {
+			display: none;
+			color: #d32f2f;
+			font-size: 14px;
+			margin-top: 4px;
+			padding-left: 4px;
+		}
+		
+		.c-contact__item-input.error {
+			border-color: #d32f2f;
+		}
+	</style>
+
 	<!-- reCAPTCHA v3 -->
 	<script is:inline define:vars={{ siteKey }}>
 		document.addEventListener("DOMContentLoaded", () => {
@@ -120,6 +139,200 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 				}
 			};
 			document.body.appendChild(script);
+		});
+	</script>
+
+	<!-- フォームバリデーション -->
+	<script is:inline>
+		document.addEventListener("DOMContentLoaded", () => {
+			const form = document.getElementById("contactForm");
+			
+			// エラーメッセージを表示する関数
+			function showError(fieldId, message) {
+				const errorElement = document.getElementById(`error-${fieldId}`);
+				const inputElement = document.getElementById(fieldId);
+				if (errorElement && inputElement) {
+					errorElement.textContent = message;
+					errorElement.style.display = "block";
+					inputElement.classList.add("error");
+				}
+			}
+			
+			// エラーメッセージをクリアする関数
+			function clearError(fieldId) {
+				const errorElement = document.getElementById(`error-${fieldId}`);
+				const inputElement = document.getElementById(fieldId);
+				if (errorElement && inputElement) {
+					errorElement.textContent = "";
+					errorElement.style.display = "none";
+					inputElement.classList.remove("error");
+				}
+			}
+			
+			// 医籍番号のバリデーション
+			const idNumberInput = document.getElementById("id_number");
+			if (idNumberInput) {
+				idNumberInput.addEventListener("input", (e) => {
+					const value = e.target.value;
+					clearError("id_number");
+					
+					// 全角数字を半角に変換
+					e.target.value = value.replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
+					
+					if (value && !/^[0-9]*$/.test(value)) {
+						showError("id_number", "半角数字で入力してください");
+					} else if (value && value.length !== 4) {
+						showError("id_number", "4桁で入力してください");
+					}
+				});
+			}
+			
+			// お名前のバリデーション
+			const nameInput = document.getElementById("name");
+			if (nameInput) {
+				nameInput.addEventListener("blur", (e) => {
+					const value = e.target.value.trim();
+					clearError("name");
+					
+					if (!value) {
+						showError("name", "お名前を入力してください");
+					}
+				});
+			}
+			
+			// 生年月日のバリデーション
+			const birthYear = document.getElementById("birth_year");
+			const birthMonth = document.getElementById("birth_month");
+			const birthDay = document.getElementById("birth_day");
+			
+			function validateBirthday() {
+				// まず全てのエラーをクリア
+				const errorElement = document.getElementById("error-birthday");
+				if (errorElement) {
+					errorElement.textContent = "";
+					errorElement.style.display = "none";
+				}
+				if (birthYear) birthYear.classList.remove("error");
+				if (birthMonth) birthMonth.classList.remove("error");
+				if (birthDay) birthDay.classList.remove("error");
+				
+				const year = parseInt(birthYear?.value);
+				const month = parseInt(birthMonth?.value);
+				const day = parseInt(birthDay?.value);
+				
+				if (!year || !month || !day) return;
+				
+				if (year < 1900 || year > 2025) {
+					if (errorElement && birthYear) {
+						errorElement.textContent = "正しい年を入力してください(1900-2025)";
+						errorElement.style.display = "block";
+						birthYear.classList.add("error");
+					}
+					return;
+				}
+				
+				if (month < 1 || month > 12) {
+					if (errorElement && birthMonth) {
+						errorElement.textContent = "月は1〜12の範囲で入力してください";
+						errorElement.style.display = "block";
+						birthMonth.classList.add("error");
+					}
+					return;
+				}
+				
+				// 月ごとの日数チェック
+				const daysInMonth = new Date(year, month, 0).getDate();
+				if (day < 1 || day > daysInMonth) {
+					if (errorElement && birthDay) {
+						errorElement.textContent = `${month}月は1〜${daysInMonth}日の範囲で入力してください`;
+						errorElement.style.display = "block";
+						birthDay.classList.add("error");
+					}
+					return;
+				}
+				
+				// 未来の日付チェック
+				const inputDate = new Date(year, month - 1, day);
+				const today = new Date();
+				if (inputDate > today) {
+					if (errorElement) {
+						errorElement.textContent = "未来の日付は入力できません";
+						errorElement.style.display = "block";
+						if (birthYear) birthYear.classList.add("error");
+						if (birthMonth) birthMonth.classList.add("error");
+						if (birthDay) birthDay.classList.add("error");
+					}
+				}
+			}
+			
+			if (birthYear) birthYear.addEventListener("blur", validateBirthday);
+			if (birthMonth) birthMonth.addEventListener("blur", validateBirthday);
+			if (birthDay) birthDay.addEventListener("blur", validateBirthday);
+			
+			// メールアドレスのバリデーション
+			const emailInput = document.getElementById("email");
+			if (emailInput) {
+				emailInput.addEventListener("blur", (e) => {
+					const value = e.target.value.trim();
+					clearError("email");
+					
+					if (!value) {
+						showError("email", "メールアドレスを入力してください");
+						return;
+					}
+					
+					// 全角文字チェック
+					if (/[^\x00-\x7F]/.test(value)) {
+						showError("email", "半角英数字で入力してください");
+						return;
+					}
+					
+					// メールアドレスの形式チェック
+					const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+					if (!emailRegex.test(value)) {
+						showError("email", "正しいメールアドレスを入力してください");
+					}
+				});
+			}
+			
+			// フォーム送信時の最終バリデーション
+			if (form) {
+				form.addEventListener("submit", (e) => {
+					let hasError = false;
+					
+					// すべてのフィールドをチェック
+					if (!idNumberInput?.value || idNumberInput.value.length !== 4) {
+						showError("id_number", "医籍番号は4桁で入力してください");
+						hasError = true;
+					}
+					
+					if (!nameInput?.value.trim()) {
+						showError("name", "お名前を入力してください");
+						hasError = true;
+					}
+					
+					validateBirthday();
+					const birthdayError = document.getElementById("error-birthday");
+					if (birthdayError && birthdayError.textContent) {
+						hasError = true;
+					}
+					
+					const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+					if (!emailInput?.value.trim() || !emailRegex.test(emailInput.value)) {
+						showError("email", "正しいメールアドレスを入力してください");
+						hasError = true;
+					}
+					
+					if (hasError) {
+						e.preventDefault();
+						// 最初のエラー箇所にスクロール
+						const firstError = document.querySelector(".c-contact__item-error[style*='display: block']");
+						if (firstError) {
+							firstError.closest(".c-contact__item").scrollIntoView({ behavior: "smooth", block: "center" });
+						}
+					}
+				});
+			}
 		});
 	</script>
 </Layout>

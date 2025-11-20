@@ -2,15 +2,23 @@
 
 @font-face {
 	font-family: "NotoSansJP";
-	src:  url('../../public/font/NotoSansJP-VariableFont_wght.ttf'), format('truetype'), local('NotoSansJP');
+	src: url('/font/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900;
+	font-display: swap;
 }
+
 @font-face {
 	font-family: "MPLUSRounded1c";
-	src:  url('../../public/font/MPLUSRounded1c-Regular.ttf'), format('truetype'), local('MPLUSRounded1c');
+	src: url('/font/MPLUSRounded1c-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-display: swap;
 }
+
 @font-face {
 	font-family: "Montserrat";
-	src:  url('../../public/font/Montserrat-VariableFont_wght.ttf'), format('truetype'), local('Montserrat');
+	src: url('/font/Montserrat-VariableFont_wght.ttf') format('truetype');
+	font-weight: 100 900;
+	font-display: swap;
 }
 
 $main-font: "NotoSansJP";

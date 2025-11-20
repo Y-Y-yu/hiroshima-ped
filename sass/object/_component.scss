@@ -947,7 +947,33 @@ contact
     }
 }
 
+.c-contact__item-error {
+	display: none;
+	color: #d32f2f;
+	font-size: 14px;
+	margin-top: 8px;
+	padding: 8px 12px;
+	background: #ffebee;
+	border-left: 3px solid #d32f2f;
+	border-radius: 4px;
+	animation: errorSlideIn 0.3s ease;
+}
 
+.c-contact__item-input.error,
+.c-contact__item-textarea.error {
+	border-color: #d32f2f !important;
+}
+
+@keyframes errorSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
 
 /**********************************************************************
 message
@@ -1518,4 +1544,84 @@ blog
 }
 
 
+
+
+/**********************************************************************
+thanks
+**********************************************************************/
+.c-thanks {
+    &__icon {
+        width: 8rem;
+        margin: 0 auto;
+		animation: checkmark 0.6s ease-in-out;
+    }
+    &__title {
+        text-align: center;
+        margin-top: 3rem;
+    }
+    &__message {
+        width: 30rem;
+        text-align: left;
+        margin: 1.5rem auto 0;
+        p {
+            line-height: 1.6;
+            margin-top: .5em;
+        }
+    }
+    &__note {
+        width: 30rem;
+        margin: 1rem auto 0;
+        p {
+            line-height: 1.6;
+        }
+    }
+    &__button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .75rem 1.5rem;
+        margin: 3rem auto 0;
+        width: 16.875rem;
+        border: 1px solid $main-color;
+        border-radius: 2em;
+        @media screen and (min-width:1025px) {
+        &:hover span::before {
+            animation: arrow linear .8s;
+            }
+        }
+        &-arrow {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: $main-color;
+            overflow: hidden;
+            &::before {
+                content: "→";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                color: $white;
+            }
+        }
+    }
+}
+
+
+
+
+@keyframes checkmark {
+	0% {
+		transform: scale(0) rotate(-45deg);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(1.1) rotate(5deg);
+	}
+	100% {
+		transform: scale(1) rotate(0deg);
+		opacity: 1;
+	}
+}
 

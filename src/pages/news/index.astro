@@ -6,7 +6,7 @@ import Layout from "../../layouts/Layout.astro";
 const title = "お知らせ";
 const description = "広島県小児科医会のお知らせ一覧です。";
 const url = "https://blog.hiroshima-ped.com/news";
-const keyword = "広島県小児科医会, 広島, 広島県, 小児科医会, お知らせ";
+const keywords = "広島県小児科医会, 広島, 広島県, 小児科医会, お知らせ";
 
 // WordPress REST APIから投稿を取得
 const res = await fetch(`${WP_BASE}/wp-json/wp/v2/posts?per_page=20&_embed`);

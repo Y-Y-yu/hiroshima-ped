@@ -1,0 +1,55 @@
+---
+// コンポーネント
+import Layout from '../layouts/Layout.astro';
+
+const title = "送信完了";
+const description = "お問い合わせを受け付けました。ご連絡ありがとうございます。";
+const url = "https://blog.hiroshima-ped.com/thanks";
+const keywords = "送信完了, 会員登録, 入局, 広島, 小児科医会, 広島県, 広島県小児科医会";
+
+
+---
+
+<Layout title={title} description={description} url={url}>
+	<div class="c-subpage__upper">
+		<div class="c-subpage__upper-ttl">
+			Thank You
+		</div>
+	</div>
+
+	<section class="l-subpage">
+		<div class="c-thanks">
+			<div class="c-thanks__icon">
+				<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<circle cx="40" cy="40" r="38" stroke="#4CAF50" stroke-width="4" fill="none"/>
+					<path d="M25 40L35 50L55 30" stroke="#4CAF50" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+			</div>
+
+			<h1 class="c-thanks__title u-font--32">
+				送信完了
+			</h1>
+
+			<div class="c-thanks__message">
+				<p>
+					お問い合わせいただき、ありがとうございます。<br>
+					内容を確認次第、担当者よりご連絡させていただきます。
+				</p>
+				<p>
+					今しばらくお待ちくださいますよう、お願い申し上げます。
+				</p>
+			</div>
+
+			<div class="c-thanks__note u-font--12">
+				<p>
+					※ 2〜3営業日以内にご返信いたします。<br>
+					※ お急ぎの場合は、お電話にてお問い合わせください。
+				</p>
+			</div>
+
+			<a href="/" class="c-thanks__button">
+				トップページへ戻る<span class="c-thanks__button-arrow"></span>
+			</a>
+		</div>
+	</section>
+</Layout>

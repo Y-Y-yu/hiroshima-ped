@@ -5,10 +5,19 @@ header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: SAMEORIGIN");
 header("X-XSS-Protection: 1; mode=block");
 
-// 環境変数から取得（サーバーに設定済み前提）
-$mailTo = $_ENV['MAIL_TO'] ?? $_SERVER['MAIL_TO'];
-$mailFrom = $_ENV['MAIL_FROM'] ?? $_SERVER['MAIL_FROM'];
-$recaptchaSecret = $_ENV['RECAPTCHA_SECRET'] ?? $_SERVER['RECAPTCHA_SECRET'];
+// config.phpを読み込む
+$configPath = __DIR__ . '/../config.php';
+
+if (!file_exists($configPath)) {
+    die("ERROR: config.phpが見つかりません: {$configPath}");
+}
+
+require_once $configPath;
+
+// 定義確認
+if (!defined('MAIL_TO') || !defined('MAIL_FROM') || !defined('RECAPTCHA_SECRET')) {
+    die("ERROR: config.phpから設定を読み込めませんでした");
+}
 
 // POSTデータ受け取り
 $idNumber = trim($_POST['id_number'] ?? '');
@@ -24,21 +33,16 @@ $token = $_POST['g-recaptcha-response'] ?? '';
 // 生年月日を統合
 $birthday = "{$birthYear}年{$birthMonth}月{$birthDay}日";
 
-// バリデーション
+// トークンチェック
 if (empty($token)) {
     http_response_code(400);
     exit('reCAPTCHAトークンが見つかりません。');
 }
 
-if (empty($recaptchaSecret)) {
-    http_response_code(500);
-    exit('サーバー設定エラー: reCAPTCHAシークレットキーが設定されていません。');
-}
-
 // reCAPTCHA検証
 $verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
 $verifyData = [
-    'secret' => $recaptchaSecret,
+    'secret' => RECAPTCHA_SECRET,
     'response' => $token,
     'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
 ];
@@ -60,9 +64,6 @@ if ($response === false) {
 }
 
 $responseKeys = json_decode($response, true);
-
-// デバッグ用(開発環境のみ)
-// error_log('reCAPTCHA response: ' . print_r($responseKeys, true));
 
 if (!$responseKeys['success']) {
     http_response_code(400);
@@ -100,7 +101,7 @@ EOT;
 // 送信
 $subject = "お問い合わせがありました";
 $headers = [
-    'From' => $mailFrom,
+    'From' => MAIL_FROM,
     'Reply-To' => $email,
 ];
 $headers_str = '';
@@ -108,7 +109,7 @@ foreach ($headers as $key => $value) {
     $headers_str .= "{$key}: {$value}\r\n";
 }
 
-if (mb_send_mail($mailTo, $subject, $body, $headers_str)) {
+if (mb_send_mail(MAIL_TO, $subject, $body, $headers_str)) {
     header('Location: /thanks');
     exit;
 } else {
