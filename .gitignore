@@ -2,6 +2,7 @@
 dist/
 .env
 private_pdfs/
+config.php
 
 # generated types
 .astro/
