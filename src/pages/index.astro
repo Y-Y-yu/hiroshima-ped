@@ -12,7 +12,7 @@ const keywords = "広島県小児科医会, 広島県, 広島, 小児科, 小児
 //画像
 
 
-const WP_BASE = "https://blog.hiroshima-ped.com/wp/wp-json/wp/v2";
+const WP_BASE = "https://wp.hiroshima-ped.com/wp-json/wp/v2";
 
 // =====================
 // 型定義
@@ -108,12 +108,12 @@ try {
 
 <script type="module">
   const container = document.getElementById("news-container");
-  const baseUrl = "https://blog.hiroshima-ped.com"; // WordPress サイトの絶対 URL
+  const baseUrl = "https://wp.hiroshima-ped.com"; // 修正: サブドメインに変更
 
   // 非同期で最新3件を取得
   async function loadNews() {
     try {
-      const res = await fetch(`${baseUrl}/wp/wp-json/wp/v2/posts?_embed&per_page=3`);
+      const res = await fetch(`${baseUrl}/wp-json/wp/v2/posts?_embed&per_page=3`);
       const posts = await res.json();
 
       if (!posts.length) {
@@ -129,9 +129,6 @@ try {
         let thumbnail = post._embedded?.["wp:featuredmedia"]?.[0]?.source_url 
                         || post.featured_image_url || "";
         if (thumbnail.startsWith("/")) thumbnail = baseUrl + thumbnail;
-
-        // リンク先を /news/投稿名 に変更
-        const postLink = `${baseUrl}/news/${post.slug}`;
 
         return `
           <a href="/news/${post.id}" class="c-news__list">
