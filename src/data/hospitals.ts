@@ -42,7 +42,7 @@ export const hospitals: Hospital[] = [
     { name: "よしのこどもとアレルギーのクリニック", area: "広島地区", address: "（広島市西区）", url: "https://yoshino-kids.com/news/news.html#" },
     
     //広島西地区
-    { name: "国立病院機構西医療センター", area: "広島西地区", address: "（大竹市）", url: "https://www.hiro-nishi-nh.jp" },
+    { name: "国立病院機構西医療センター", area: "広島西地区", address: "（大竹市）", url: "https://hiroshimanishi.hosp.go.jp/" },
     { name: "しまだファミリークリニック", area: "広島西地区", address: "（大竹市）", url: "https://www.shimada-fc.com" },
     { name: "ひろしまこどもクリニック", area: "広島西地区", address: "（廿日市市）", url: "https://hiroshima-kids.com" },
     { name: "河村小児科", area: "広島西地区", address: "（廿日市市）", url: "https://hiroshima-kids.com" },
