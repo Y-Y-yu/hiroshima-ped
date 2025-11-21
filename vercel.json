@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/wp/:path*",
+      "destination": "http://162.43.116.35/wp/:path*"
+    }
+  ]
+}
