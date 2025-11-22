@@ -43,7 +43,17 @@ const url = `/news/${slug}`;
 
         const post = await res.json();
         
-        const imageUrl = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+        let imageUrl = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+        
+        // 画像URLが相対パスまたはblog.hiroshima-ped.comの場合、wp.hiroshima-ped.comに変換
+        if (imageUrl) {
+          if (imageUrl.startsWith('/')) {
+            imageUrl = `https://wp.hiroshima-ped.com${imageUrl}`;
+          } else if (imageUrl.includes('blog.hiroshima-ped.com')) {
+            imageUrl = imageUrl.replace('blog.hiroshima-ped.com', 'wp.hiroshima-ped.com');
+          }
+        }
+        
         const date = new Date(post.date).toLocaleDateString('ja-JP');
         
         container.innerHTML = `
