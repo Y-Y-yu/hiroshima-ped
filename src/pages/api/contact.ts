@@ -3,12 +3,8 @@ import type { APIRoute } from 'astro';
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, redirect }) => {
-try {
-  console.log('=== Contact API Debug ===');
-  console.log('RESEND_API_KEY:', import.meta.env.RESEND_API_KEY ? 'exists' : 'missing');
-  console.log('MAIL_TO:', import.meta.env.MAIL_TO);
-  
-  const formData = await request.formData();
+  try {
+    const formData = await request.formData();
     
     const idNumber = formData.get('id_number') as string;
     const name = formData.get('name') as string;
@@ -79,7 +75,7 @@ ${message || '（なし）'}
       },
       body: JSON.stringify({
         from: 'お問い合わせフォーム <onboarding@resend.dev>',
-        to: [mailTo],
+        to: mailTo,
         reply_to: email,
         subject: 'お問い合わせがありました',
         text: emailBody,
@@ -96,7 +92,18 @@ ${message || '（なし）'}
     return redirect('/thanks', 302);
 
   } catch (error) {
-    console.error('Contact form error:', error);
-    return new Response('送信に失敗しました', { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : '';
+    console.error('=== Contact form error ===');
+    console.error('Message:', errorMessage);
+    console.error('Stack:', errorStack);
+    console.error('Full error:', error);
+    return new Response(JSON.stringify({ 
+      error: '送信に失敗しました',
+      details: errorMessage 
+    }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
