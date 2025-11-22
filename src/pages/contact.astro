@@ -123,28 +123,10 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 		}
 	</style>
 
-	<!-- reCAPTCHA v3 -->
+	<!-- 統合されたフォーム処理 -->
 	<script is:inline define:vars={{ siteKey }}>
 		document.addEventListener("DOMContentLoaded", () => {
-			const script = document.createElement("script");
-			script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
-			script.onload = () => {
-				if (typeof grecaptcha !== "undefined") {
-					grecaptcha.ready(() => {
-						grecaptcha.execute(siteKey, { action: "submit" }).then((token) => {
-							const input = document.getElementById("g-recaptcha-response");
-							if (input) input.value = token;
-						});
-					});
-				}
-			};
-			document.body.appendChild(script);
-		});
-	</script>
-
-	<!-- フォームバリデーション -->
-	<script is:inline>
-		document.addEventListener("DOMContentLoaded", () => {
+			let recaptchaReady = false;
 			const form = document.getElementById("contactForm");
 			
 			// エラーメッセージを表示する関数
@@ -169,14 +151,77 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 				}
 			}
 			
+			// 生年月日のバリデーション
+			function validateBirthday() {
+				const birthYear = document.getElementById("birth_year");
+				const birthMonth = document.getElementById("birth_month");
+				const birthDay = document.getElementById("birth_day");
+				const errorElement = document.getElementById("error-birthday");
+				
+				if (errorElement) {
+					errorElement.textContent = "";
+					errorElement.style.display = "none";
+				}
+				if (birthYear) birthYear.classList.remove("error");
+				if (birthMonth) birthMonth.classList.remove("error");
+				if (birthDay) birthDay.classList.remove("error");
+				
+				const year = parseInt(birthYear?.value);
+				const month = parseInt(birthMonth?.value);
+				const day = parseInt(birthDay?.value);
+				
+				if (!year || !month || !day) return false;
+				
+				if (year < 1900 || year > 2025) {
+					if (errorElement && birthYear) {
+						errorElement.textContent = "正しい年を入力してください(1900-2025)";
+						errorElement.style.display = "block";
+						birthYear.classList.add("error");
+					}
+					return false;
+				}
+				
+				if (month < 1 || month > 12) {
+					if (errorElement && birthMonth) {
+						errorElement.textContent = "月は1〜12の範囲で入力してください";
+						errorElement.style.display = "block";
+						birthMonth.classList.add("error");
+					}
+					return false;
+				}
+				
+				const daysInMonth = new Date(year, month, 0).getDate();
+				if (day < 1 || day > daysInMonth) {
+					if (errorElement && birthDay) {
+						errorElement.textContent = `${month}月は1〜${daysInMonth}日の範囲で入力してください`;
+						errorElement.style.display = "block";
+						birthDay.classList.add("error");
+					}
+					return false;
+				}
+				
+				const inputDate = new Date(year, month - 1, day);
+				const today = new Date();
+				if (inputDate > today) {
+					if (errorElement) {
+						errorElement.textContent = "未来の日付は入力できません";
+						errorElement.style.display = "block";
+						if (birthYear) birthYear.classList.add("error");
+						if (birthMonth) birthMonth.classList.add("error");
+						if (birthDay) birthDay.classList.add("error");
+					}
+					return false;
+				}
+				
+				return true;
+			}
+			
 			// 医籍番号のバリデーション
 			const idNumberInput = document.getElementById("id_number");
 			if (idNumberInput) {
 				idNumberInput.addEventListener("input", (e) => {
 					const value = e.target.value;
 					clearError("id_number");
-					
-					// 全角数字を半角に変換
 					e.target.value = value.replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0));
 					
 					if (value && !/^[0-9]*$/.test(value)) {
@@ -193,78 +238,16 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 				nameInput.addEventListener("blur", (e) => {
 					const value = e.target.value.trim();
 					clearError("name");
-					
 					if (!value) {
 						showError("name", "お名前を入力してください");
 					}
 				});
 			}
 			
-			// 生年月日のバリデーション
+			// 生年月日の各フィールドにイベントリスナー
 			const birthYear = document.getElementById("birth_year");
 			const birthMonth = document.getElementById("birth_month");
 			const birthDay = document.getElementById("birth_day");
-			
-			function validateBirthday() {
-				// まず全てのエラーをクリア
-				const errorElement = document.getElementById("error-birthday");
-				if (errorElement) {
-					errorElement.textContent = "";
-					errorElement.style.display = "none";
-				}
-				if (birthYear) birthYear.classList.remove("error");
-				if (birthMonth) birthMonth.classList.remove("error");
-				if (birthDay) birthDay.classList.remove("error");
-				
-				const year = parseInt(birthYear?.value);
-				const month = parseInt(birthMonth?.value);
-				const day = parseInt(birthDay?.value);
-				
-				if (!year || !month || !day) return;
-				
-				if (year < 1900 || year > 2025) {
-					if (errorElement && birthYear) {
-						errorElement.textContent = "正しい年を入力してください(1900-2025)";
-						errorElement.style.display = "block";
-						birthYear.classList.add("error");
-					}
-					return;
-				}
-				
-				if (month < 1 || month > 12) {
-					if (errorElement && birthMonth) {
-						errorElement.textContent = "月は1〜12の範囲で入力してください";
-						errorElement.style.display = "block";
-						birthMonth.classList.add("error");
-					}
-					return;
-				}
-				
-				// 月ごとの日数チェック
-				const daysInMonth = new Date(year, month, 0).getDate();
-				if (day < 1 || day > daysInMonth) {
-					if (errorElement && birthDay) {
-						errorElement.textContent = `${month}月は1〜${daysInMonth}日の範囲で入力してください`;
-						errorElement.style.display = "block";
-						birthDay.classList.add("error");
-					}
-					return;
-				}
-				
-				// 未来の日付チェック
-				const inputDate = new Date(year, month - 1, day);
-				const today = new Date();
-				if (inputDate > today) {
-					if (errorElement) {
-						errorElement.textContent = "未来の日付は入力できません";
-						errorElement.style.display = "block";
-						if (birthYear) birthYear.classList.add("error");
-						if (birthMonth) birthMonth.classList.add("error");
-						if (birthDay) birthDay.classList.add("error");
-					}
-				}
-			}
-			
 			if (birthYear) birthYear.addEventListener("blur", validateBirthday);
 			if (birthMonth) birthMonth.addEventListener("blur", validateBirthday);
 			if (birthDay) birthDay.addEventListener("blur", validateBirthday);
@@ -281,13 +264,11 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 						return;
 					}
 					
-					// 全角文字チェック
 					if (/[^\x00-\x7F]/.test(value)) {
 						showError("email", "半角英数字で入力してください");
 						return;
 					}
 					
-					// メールアドレスの形式チェック
 					const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 					if (!emailRegex.test(value)) {
 						showError("email", "正しいメールアドレスを入力してください");
@@ -295,12 +276,32 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 				});
 			}
 			
-			// フォーム送信時の最終バリデーション
+			// reCAPTCHA読み込み
+			if (siteKey) {
+				const script = document.createElement("script");
+				script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+				script.onload = () => {
+					if (typeof grecaptcha !== "undefined") {
+						grecaptcha.ready(() => {
+							recaptchaReady = true;
+							console.log('reCAPTCHA ready');
+						});
+					}
+				};
+				script.onerror = () => {
+					console.error('reCAPTCHA読み込み失敗');
+				};
+				document.head.appendChild(script);
+			}
+			
+			// フォーム送信
 			if (form) {
-				form.addEventListener("submit", (e) => {
+				form.addEventListener("submit", async (e) => {
+					e.preventDefault();
+					
 					let hasError = false;
 					
-					// すべてのフィールドをチェック
+					// バリデーション
 					if (!idNumberInput?.value || idNumberInput.value.length !== 4) {
 						showError("id_number", "医籍番号は4桁で入力してください");
 						hasError = true;
@@ -311,9 +312,7 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 						hasError = true;
 					}
 					
-					validateBirthday();
-					const birthdayError = document.getElementById("error-birthday");
-					if (birthdayError && birthdayError.textContent) {
+					if (!validateBirthday()) {
 						hasError = true;
 					}
 					
@@ -324,12 +323,40 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 					}
 					
 					if (hasError) {
-						e.preventDefault();
-						// 最初のエラー箇所にスクロール
 						const firstError = document.querySelector(".c-contact__item-error[style*='display: block']");
 						if (firstError) {
 							firstError.closest(".c-contact__item").scrollIntoView({ behavior: "smooth", block: "center" });
 						}
+						return;
+					}
+					
+					// reCAPTCHAトークン取得
+					if (!recaptchaReady || typeof grecaptcha === 'undefined') {
+						alert('送信準備中です。もう一度お試しください。');
+						return;
+					}
+					
+					try {
+						const token = await grecaptcha.execute(siteKey, { action: 'submit' });
+						const tokenInput = document.getElementById("g-recaptcha-response");
+						if (tokenInput) {
+							tokenInput.value = token;
+						}
+						
+						// 送信ボタンを無効化
+						const submitBtn = form.querySelector('button[type="submit"]');
+						if (submitBtn) {
+							submitBtn.disabled = true;
+							const arrow = submitBtn.querySelector('.c-contact__submit-arrow');
+							if (arrow) arrow.style.display = 'none';
+							submitBtn.childNodes[0].textContent = '送信中...';
+						}
+						
+						// フォーム送信
+						form.submit();
+					} catch (error) {
+						console.error('reCAPTCHA error:', error);
+						alert('送信に失敗しました。ページを再読み込みしてください。');
 					}
 				});
 			}
