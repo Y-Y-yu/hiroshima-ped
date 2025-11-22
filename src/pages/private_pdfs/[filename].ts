@@ -1,12 +1,5 @@
 import type { APIRoute } from 'astro';
 import { getSession } from '../../lib/session';
-import fs from 'fs';
-import path from 'path';
-
-// Vercelでは .vercel/output/static にファイルが配置される
-const PDF_DIRECTORY = process.env.NODE_ENV === 'production'
-  ? path.join(process.cwd(), '.vercel/output/static/private_pdfs')
-  : path.join(process.cwd(), 'public/private_pdfs');
 
 export const prerender = false;
 
@@ -23,7 +16,7 @@ export const GET: APIRoute = async ({ params, cookies }) => {
     return new Response('Filename is required', { status: 400 });
   }
 
-  // パストラバーサル対策
+  // セキュリティチェック: パストラバーサル対策
   if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
     return new Response('Invalid filename', { status: 400 });
   }
@@ -33,37 +26,42 @@ export const GET: APIRoute = async ({ params, cookies }) => {
     return new Response('Invalid file type', { status: 400 });
   }
 
-  // ファイルパスの構築
-  const filepath = path.join(PDF_DIRECTORY, filename);
-
-  console.log('=== PDF Debug ===');
-  console.log('PDF_DIRECTORY:', PDF_DIRECTORY);
-  console.log('filepath:', filepath);
-  console.log('File exists:', fs.existsSync(filepath));
-
   try {
-    // ファイルの存在確認
-    if (!fs.existsSync(filepath)) {
-      console.error('ファイルが見つかりません:', filepath);
-      return new Response(`File not found: ${filename}`, { status: 404 });
+    // XserverのPDFを取得（blog.hiroshima-ped.comに配置）
+    const pdfUrl = `https://blog.hiroshima-ped.com/private_pdfs/${encodeURIComponent(filename)}`;
+    
+    console.log('Fetching PDF from:', pdfUrl);
+    
+    const response = await fetch(pdfUrl, {
+      headers: {
+        'Referer': 'https://blog.hiroshima-ped.com',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('PDF fetch failed:', response.status, response.statusText);
+      return new Response('File not found', { status: 404 });
     }
 
-    // ファイルを読み込む
-    const fileBuffer = fs.readFileSync(filepath);
+    // PDFデータを取得
+    const pdfBuffer = await response.arrayBuffer();
+
+    console.log('PDF fetched successfully, size:', pdfBuffer.byteLength);
 
     // PDFとして配信
-    return new Response(fileBuffer, {
+    return new Response(pdfBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `inline; filename="${filename}"`,
+        'Content-Length': pdfBuffer.byteLength.toString(),
         'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
         'Pragma': 'no-cache',
         'X-Robots-Tag': 'noindex, nofollow',
       },
     });
   } catch (error) {
-    console.error('PDF読み込みエラー:', error);
+    console.error('PDF取得エラー:', error);
     return new Response('Internal Server Error', { status: 500 });
   }
 };
