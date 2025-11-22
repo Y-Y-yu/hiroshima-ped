@@ -1,7 +1,6 @@
 # build output
 dist/
 .env
-private_pdfs/
 config.php
 .cache_ggshield
 
