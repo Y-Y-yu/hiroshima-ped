@@ -28,7 +28,7 @@ export const GET: APIRoute = async ({ params, cookies }) => {
 
   try {
     // XserverのPDFを取得（blog.hiroshima-ped.comに配置）
-    const pdfUrl = `https://blog.hiroshima-ped.com/private_pdfs/${encodeURIComponent(filename)}`;
+    const pdfUrl = `https://wp.hiroshima-ped.com/private_pdfs/${encodeURIComponent(filename)}`;
     
     console.log('Fetching PDF from:', pdfUrl);
     
