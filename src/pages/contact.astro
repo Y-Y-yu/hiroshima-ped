@@ -129,6 +129,9 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 			let recaptchaReady = false;
 			const form = document.getElementById("contactForm");
 			
+			console.log('Form initialized');
+			console.log('siteKey:', siteKey ? 'exists' : 'missing');
+			
 			// エラーメッセージを表示する関数
 			function showError(fieldId, message) {
 				const errorElement = document.getElementById(`error-${fieldId}`);
@@ -359,8 +362,16 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 					}
 					
 					// reCAPTCHAトークン取得
+					console.log('Submit clicked');
+					console.log('recaptchaReady:', recaptchaReady);
+					console.log('grecaptcha exists:', typeof grecaptcha !== 'undefined');
+					
 					if (!recaptchaReady || typeof grecaptcha === 'undefined') {
-						alert('送信準備中です。もう一度お試しください。');
+						console.error('reCAPTCHA not ready');
+						// 10秒待ってからリトライを促す
+						setTimeout(() => {
+							alert('送信準備中です。もう一度お試しください。');
+						}, 100);
 						return;
 					}
 					
