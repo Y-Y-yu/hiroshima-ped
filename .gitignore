@@ -3,6 +3,10 @@ dist/
 .env
 config.php
 .cache_ggshield
+public/private_pdfs
+private_pdfs
+*.pdf
+
 
 # generated types
 .astro/
