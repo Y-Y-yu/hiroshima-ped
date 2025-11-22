@@ -277,6 +277,15 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 			}
 			
 			// reCAPTCHA読み込み
+			const submitBtn = form?.querySelector('button[type="submit"]');
+			
+			// 初期状態: ボタンを無効化
+			if (submitBtn) {
+				submitBtn.disabled = true;
+				submitBtn.style.opacity = '0.5';
+				submitBtn.style.cursor = 'not-allowed';
+			}
+			
 			if (siteKey) {
 				const script = document.createElement("script");
 				script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
@@ -285,13 +294,32 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 						grecaptcha.ready(() => {
 							recaptchaReady = true;
 							console.log('reCAPTCHA ready');
+							
+							// ボタンを有効化
+							if (submitBtn) {
+								submitBtn.disabled = false;
+								submitBtn.style.opacity = '1';
+								submitBtn.style.cursor = 'pointer';
+							}
 						});
 					}
 				};
 				script.onerror = () => {
 					console.error('reCAPTCHA読み込み失敗');
+					if (submitBtn) {
+						submitBtn.disabled = false;
+						submitBtn.style.opacity = '1';
+						submitBtn.style.cursor = 'pointer';
+					}
 				};
 				document.head.appendChild(script);
+			} else {
+				// siteKeyがない場合もボタンを有効化
+				if (submitBtn) {
+					submitBtn.disabled = false;
+					submitBtn.style.opacity = '1';
+					submitBtn.style.cursor = 'pointer';
+				}
 			}
 			
 			// フォーム送信
