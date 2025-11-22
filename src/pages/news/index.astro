@@ -31,7 +31,21 @@ const keywords = "広島県小児科医会, 広島, 広島県, 小児科医会, 
     const container = document.getElementById('news-list');
     const WP_BASE = 'https://wp.hiroshima-ped.com/wp-json/wp/v2';
 
+    type WPPost = {
+      id: number;
+      slug: string;
+      date: string;
+      title: { rendered: string };
+      _embedded?: {
+        'wp:featuredmedia'?: {
+          source_url: string;
+        }[];
+      };
+    };
+
     async function loadNews() {
+      if (!container) return;
+
       try {
         const res = await fetch(`${WP_BASE}/posts?per_page=20&_embed`);
         
@@ -40,14 +54,14 @@ const keywords = "広島県小児科医会, 広島, 広島県, 小児科医会, 
           return;
         }
 
-        const posts = await res.json();
+        const posts: WPPost[] = await res.json();
 
         if (!posts.length) {
           container.innerHTML = '<li style="list-style: none; text-align: center; padding: 40px 0;">お知らせはありません</li>';
           return;
         }
 
-        container.innerHTML = posts.map(post => {
+        container.innerHTML = posts.map((post: WPPost) => {
           let imageUrl = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
           
           // 画像URLの修正
