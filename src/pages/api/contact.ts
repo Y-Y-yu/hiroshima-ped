@@ -46,17 +46,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const mailTo = import.meta.env.MAIL_TO;
     const resendApiKey = import.meta.env.RESEND_API_KEY;
 
-    console.log('=== Email Config ===');
-    console.log('MAIL_TO:', mailTo || 'MISSING');
-    console.log('RESEND_API_KEY:', resendApiKey ? 'exists' : 'MISSING');
-
-    if (!mailTo) {
-      console.error('MAIL_TO is not set');
-      return new Response('メール設定エラー', { status: 500 });
-    }
-
-    if (!resendApiKey) {
-      console.error('RESEND_API_KEY is not set');
+    if (!mailTo || !resendApiKey) {
       return new Response('メール設定エラー', { status: 500 });
     }
 
@@ -98,7 +88,7 @@ ${message || '（なし）'}
 
     if (!sendResponse.ok) {
       const errorText = await sendResponse.text();
-      console.error('Resend error:', errorText);
+      console.error('メール送信エラー:', errorText);
       return new Response('メール送信に失敗しました', { status: 500 });
     }
 
@@ -106,18 +96,7 @@ ${message || '（なし）'}
     return redirect('/thanks', 302);
 
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    const errorStack = error instanceof Error ? error.stack : '';
-    console.error('=== Contact form error ===');
-    console.error('Message:', errorMessage);
-    console.error('Stack:', errorStack);
-    console.error('Full error:', error);
-    return new Response(JSON.stringify({ 
-      error: '送信に失敗しました',
-      details: errorMessage 
-    }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    console.error('お問い合わせフォームエラー:', error);
+    return new Response('送信に失敗しました', { status: 500 });
   }
 };

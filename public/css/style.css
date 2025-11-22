@@ -2232,6 +2232,11 @@ thanks
   text-align: left;
   margin: 1.5rem auto 0;
 }
+@media screen and (max-width: 768px) {
+  .c-thanks__message {
+    width: 100%;
+  }
+}
 .c-thanks__message p {
   line-height: 1.6;
   margin-top: 0.5em;
@@ -2239,6 +2244,11 @@ thanks
 .c-thanks__note {
   width: 30rem;
   margin: 1rem auto 0;
+}
+@media screen and (max-width: 768px) {
+  .c-thanks__note {
+    width: 100%;
+  }
 }
 .c-thanks__note p {
   line-height: 1.6;

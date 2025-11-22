@@ -1563,6 +1563,9 @@ thanks
         width: 30rem;
         text-align: left;
         margin: 1.5rem auto 0;
+        @include mq("md") {
+            width: 100%;
+        }
         p {
             line-height: 1.6;
             margin-top: .5em;
@@ -1571,6 +1574,9 @@ thanks
     &__note {
         width: 30rem;
         margin: 1rem auto 0;
+        @include mq("md") {
+            width: 100%;
+        }
         p {
             line-height: 1.6;
         }
