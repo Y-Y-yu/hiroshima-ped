@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 
-export const prerender = true;
+export const prerender = false; // 修正: false に変更（動的レンダリング）
 
 // =====================
 // 型定義
@@ -20,47 +20,33 @@ type WPPost = {
 };
 
 // =====================
-// getStaticPaths
+// 動的に投稿を取得
 // =====================
-export async function getStaticPaths() {
-  const WP_BASE = 'https://wp.hiroshima-ped.com/wp-json/wp/v2'; // 修正: 直接指定
+const { slug } = Astro.params;
+const WP_BASE = 'https://wp.hiroshima-ped.com/wp-json/wp/v2';
 
-  try {
-    const res = await fetch(`${WP_BASE}/posts?per_page=100&_embed`);
-    if (!res.ok) {
-      console.error(`❌ API Error: ${res.status} ${res.statusText}`);
-      return [];
-    }
+let post: WPPost | null = null;
 
-    const posts: WPPost[] = await res.json();
-
-    return posts.map((post) => ({
-      params: { slug: String(post.id) }, // slug を数字 ID にする
-      props: { post },
-    }));
-  } catch (err) {
-    console.error("❌ getStaticPaths error:", err);
-    return [];
+try {
+  const res = await fetch(`${WP_BASE}/posts/${slug}`);
+  if (res.ok) {
+    post = await res.json();
   }
+} catch (err) {
+  console.error("Error fetching post:", err);
 }
-
-// =====================
-// getStaticPaths → props
-// =====================
-const { post } = Astro.props;
 
 // =====================
 // アイキャッチ取得
 // =====================
-let imageUrl =
-  post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? "";
+let imageUrl = post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? "";
 
 // =====================
 // ページメタ情報
 // =====================
 const title = post?.title.rendered ?? "Post";
 const description = post?.title.rendered ?? "";
-const url = `/news/${post?.slug}`;
+const url = `/news/${slug}`;
 ---
 
 <Layout title={title} description={description} url={url}>
