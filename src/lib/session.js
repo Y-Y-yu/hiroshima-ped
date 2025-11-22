@@ -2,7 +2,7 @@
 
 const SESSION_SECRET = import.meta.env.SESSION_SECRET || 'default-secret-key';
 const COOKIE_NAME = 'session';
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7日間
+const COOKIE_MAX_AGE = 60 * 60 * 24; // 1日間
 
 /**
  * データを暗号化してトークンを生成

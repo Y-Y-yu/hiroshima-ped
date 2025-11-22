@@ -1,0 +1,33 @@
+---
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const isDev = import.meta.env.DEV;
+---
+
+{!isDev && gaId && (
+  <>
+    <script 
+      type="text/partytown" 
+      src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+    ></script>
+    
+    <script type="text/partytown" define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId, {
+        page_path: window.location.pathname,
+      });
+    </script>
+  </>
+)}
+
+<!-- View Transitions対応 -->
+<script define:vars={{ gaId }}>
+  if (typeof gtag !== 'undefined') {
+    document.addEventListener('astro:page-load', () => {
+      gtag('config', gaId, {
+        page_path: window.location.pathname,
+      });
+    });
+  }
+</script>
