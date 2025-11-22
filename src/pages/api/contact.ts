@@ -42,10 +42,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       return new Response('スパムの可能性が検出されました', { status: 400 });
     }
 
-    // メール送信（SendGridを使用）
+    // メール送信（Resendを使用）
     const mailTo = import.meta.env.MAIL_TO;
-    const mailFrom = import.meta.env.MAIL_FROM;
-    const sendgridApiKey = import.meta.env.SENDGRID_API_KEY;
+    const resendApiKey = import.meta.env.RESEND_API_KEY;
 
     const emailBody = `
 【医籍番号(下4桁)】
@@ -67,30 +66,25 @@ ${type}
 ${message || '（なし）'}
     `.trim();
 
-    // SendGrid APIでメール送信
-    const sendResponse = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    // Resend APIでメール送信
+    const sendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${sendgridApiKey}`,
+        'Authorization': `Bearer ${resendApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        personalizations: [{
-          to: [{ email: mailTo }],
-          subject: 'お問い合わせがありました',
-        }],
-        from: { email: mailFrom },
-        reply_to: { email: email },
-        content: [{
-          type: 'text/plain',
-          value: emailBody,
-        }],
+        from: 'お問い合わせフォーム <onboarding@resend.dev>',
+        to: [mailTo],
+        reply_to: email,
+        subject: 'お問い合わせがありました',
+        text: emailBody,
       }),
     });
 
     if (!sendResponse.ok) {
       const errorText = await sendResponse.text();
-      console.error('SendGrid error:', errorText);
+      console.error('Resend error:', errorText);
       return new Response('メール送信に失敗しました', { status: 500 });
     }
 
