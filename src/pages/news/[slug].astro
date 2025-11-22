@@ -26,13 +26,24 @@ const { slug } = Astro.params;
 const WP_BASE = 'https://wp.hiroshima-ped.com/wp-json/wp/v2';
 
 let post: WPPost | null = null;
+let errorMessage = '';
 
 try {
-  const res = await fetch(`${WP_BASE}/posts/${slug}`);
+  const apiUrl = `${WP_BASE}/posts/${slug}`;
+  console.log('Fetching from:', apiUrl);
+  
+  const res = await fetch(apiUrl);
+  console.log('Response status:', res.status);
+  
   if (res.ok) {
     post = await res.json();
+    console.log('Post fetched successfully:', post.id);
+  } else {
+    errorMessage = `API returned ${res.status}: ${res.statusText}`;
+    console.error(errorMessage);
   }
 } catch (err) {
+  errorMessage = `Error: ${err}`;
   console.error("Error fetching post:", err);
 }
 
@@ -84,7 +95,11 @@ const url = `/news/${slug}`;
         ></div>
       </article>
     ) : (
-      <p>記事が見つかりませんでした。</p>
+      <div>
+        <p>記事が見つかりませんでした。</p>
+        {errorMessage && <p style="color: red; margin-top: 10px;">デバッグ情報: {errorMessage}</p>}
+        <p style="color: gray; margin-top: 10px;">アクセスしたID: {slug}</p>
+      </div>
     )}
   </section>
 </Layout>
