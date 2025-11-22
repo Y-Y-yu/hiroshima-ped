@@ -1,30 +1,10 @@
 ---
-const WP_BASE = 'https://wp.hiroshima-ped.com'; // 修正
-
 import Layout from "../../layouts/Layout.astro";
 
 const title = "お知らせ";
 const description = "広島県小児科医会のお知らせ一覧です。";
 const url = "https://blog.hiroshima-ped.com/news";
 const keywords = "広島県小児科医会, 広島, 広島県, 小児科医会, お知らせ";
-
-// WordPress REST APIから投稿を取得
-const res = await fetch(`${WP_BASE}/wp-json/wp/v2/posts?per_page=20&_embed`);
-type WPPost = {
-  id: number;
-  slug: string;
-  date: string;
-  title: { rendered: string };
-  _embedded?: {
-    'wp:featuredmedia'?: {
-      source_url: string;
-    }[];
-  };
-};
-
-
-const posts: WPPost[] = await res.json();
-
 ---
 
 <Layout title={title} description={description} url={url}>
@@ -42,32 +22,66 @@ const posts: WPPost[] = await res.json();
     <h1 class="c-subpage__ttl u-font--32">
       ニュース一覧
     </h1>
-    <ul class="c-news-all">
-          {posts.map((post) => (
+    <ul class="c-news-all" id="news-list">
+      <li style="list-style: none; text-align: center; padding: 40px 0;">読み込み中...</li>
+    </ul>
+  </section>
+
+  <script>
+    const container = document.getElementById('news-list');
+    const WP_BASE = 'https://wp.hiroshima-ped.com/wp-json/wp/v2';
+
+    async function loadNews() {
+      try {
+        const res = await fetch(`${WP_BASE}/posts?per_page=20&_embed`);
+        
+        if (!res.ok) {
+          container.innerHTML = '<li style="list-style: none; text-align: center; padding: 40px 0;">お知らせの取得に失敗しました</li>';
+          return;
+        }
+
+        const posts = await res.json();
+
+        if (!posts.length) {
+          container.innerHTML = '<li style="list-style: none; text-align: center; padding: 40px 0;">お知らせはありません</li>';
+          return;
+        }
+
+        container.innerHTML = posts.map(post => {
+          let imageUrl = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+          
+          // 画像URLの修正
+          if (imageUrl) {
+            if (imageUrl.startsWith('/')) {
+              imageUrl = `https://wp.hiroshima-ped.com${imageUrl}`;
+            } else if (imageUrl.includes('blog.hiroshima-ped.com')) {
+              imageUrl = imageUrl.replace('blog.hiroshima-ped.com', 'wp.hiroshima-ped.com');
+            }
+          }
+
+          const date = new Date(post.date).toLocaleDateString('ja-JP');
+
+          return `
             <li class="c-news-all__item">
-              <a href={`/news/${post.id}`} style="text-decoration:none; color:#333;">
+              <a href="/news/${post.id}" style="text-decoration:none; color:#333;">
                 <div class="c-news-all__item-img">
-                {post._embedded?.['wp:featuredmedia']?.[0]?.source_url && (
-                <img
-                  src={
-                  post._embedded['wp:featuredmedia'][0].source_url.startsWith('http')
-                  ? post._embedded['wp:featuredmedia'][0].source_url
-                  : `${WP_BASE}${post._embedded['wp:featuredmedia'][0].source_url}`
-                  }
-                alt={post.title.rendered}
-                />
-                )}
+                  ${imageUrl ? `<img src="${imageUrl}" alt="${post.title.rendered}">` : ''}
                 </div>
                 <div class="c-news-all__item-text">
-                  <time datetime={post.date}>
-                    {new Date(post.date).toLocaleDateString('ja-JP')}
-                  </time>
-                  <div class="c-news-all__item-ttl" set:html={post.title.rendered}></div>
+                  <time datetime="${post.date}">${date}</time>
+                  <div class="c-news-all__item-ttl">${post.title.rendered}</div>
                 </div>
               </a>
             </li>
-          ))}
-    </ul>
-  </section>
-  
+          `;
+        }).join('');
+
+      } catch (err) {
+        container.innerHTML = '<li style="list-style: none; text-align: center; padding: 40px 0;">お知らせの取得に失敗しました</li>';
+        console.error('Error loading news:', err);
+      }
+    }
+
+    loadNews();
+  </script>
 </Layout>
