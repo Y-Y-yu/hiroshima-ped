@@ -1,5 +1,5 @@
 ---
-const WP_BASE = 'https://blog.hiroshima-ped.com/wp';
+const WP_BASE = 'https://wp.hiroshima-ped.com'; // 修正
 
 import Layout from "../../layouts/Layout.astro";
 
@@ -52,7 +52,7 @@ const posts: WPPost[] = await res.json();
                   src={
                   post._embedded['wp:featuredmedia'][0].source_url.startsWith('http')
                   ? post._embedded['wp:featuredmedia'][0].source_url
-                  : `https://blog.hiroshima-ped.com${post._embedded['wp:featuredmedia'][0].source_url}`
+                  : `${WP_BASE}${post._embedded['wp:featuredmedia'][0].source_url}`
                   }
                 alt={post.title.rendered}
                 />
@@ -71,5 +71,3 @@ const posts: WPPost[] = await res.json();
   </section>
   
 </Layout>
-
-

@@ -23,23 +23,21 @@ type WPPost = {
 // getStaticPaths
 // =====================
 export async function getStaticPaths() {
-  const WP_BASE = import.meta.env.VITE_WP_BASE; // ←ここに移動
-
-  if (!WP_BASE) {
-    console.error("❌ VITE_WP_BASE is not defined");
-    return [];
-  }
+  const WP_BASE = 'https://wp.hiroshima-ped.com/wp-json/wp/v2'; // 修正: 直接指定
 
   try {
     const res = await fetch(`${WP_BASE}/posts?per_page=100&_embed`);
-    if (!res.ok) return [];
+    if (!res.ok) {
+      console.error(`❌ API Error: ${res.status} ${res.statusText}`);
+      return [];
+    }
 
     const posts: WPPost[] = await res.json();
 
-return posts.map((post) => ({
-  params: { slug: String(post.id) }, // ← slug を数字 ID にする
-  props: { post },
-}));
+    return posts.map((post) => ({
+      params: { slug: String(post.id) }, // slug を数字 ID にする
+      props: { post },
+    }));
   } catch (err) {
     console.error("❌ getStaticPaths error:", err);
     return [];
