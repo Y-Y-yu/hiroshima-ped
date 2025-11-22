@@ -5,12 +5,10 @@ const isDev = import.meta.env.DEV;
 
 {!isDev && gaId && (
   <>
-    <script 
-      type="text/partytown" 
-      src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-    ></script>
+    <!-- Google Analytics -->
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
     
-    <script type="text/partytown" define:vars={{ gaId }}>
+    <script define:vars={{ gaId }}>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -18,16 +16,16 @@ const isDev = import.meta.env.DEV;
         page_path: window.location.pathname,
       });
     </script>
+    
+    <!-- View Transitions対応 -->
+    <script define:vars={{ gaId }}>
+      document.addEventListener('astro:page-load', () => {
+        if (typeof gtag !== 'undefined') {
+          gtag('config', gaId, {
+            page_path: window.location.pathname,
+          });
+        }
+      });
+    </script>
   </>
 )}
-
-<!-- View Transitions対応 -->
-<script define:vars={{ gaId }}>
-  if (typeof gtag !== 'undefined') {
-    document.addEventListener('astro:page-load', () => {
-      gtag('config', gaId, {
-        page_path: window.location.pathname,
-      });
-    });
-  }
-</script>
