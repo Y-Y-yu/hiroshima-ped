@@ -34,7 +34,7 @@ const url = `/news/${slug}`;
 
     async function loadPost() {
       try {
-        const res = await fetch(`${WP_BASE}/posts/${slug}`);
+        const res = await fetch(`${WP_BASE}/posts/${slug}?_embed`);
         
         if (!res.ok) {
           container.innerHTML = `<p>記事が見つかりませんでした。(エラー: ${res.status})</p>`;
