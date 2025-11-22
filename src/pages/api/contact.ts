@@ -3,8 +3,12 @@ import type { APIRoute } from 'astro';
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request, redirect }) => {
-  try {
-    const formData = await request.formData();
+try {
+  console.log('=== Contact API Debug ===');
+  console.log('RESEND_API_KEY:', import.meta.env.RESEND_API_KEY ? 'exists' : 'missing');
+  console.log('MAIL_TO:', import.meta.env.MAIL_TO);
+  
+  const formData = await request.formData();
     
     const idNumber = formData.get('id_number') as string;
     const name = formData.get('name') as string;
