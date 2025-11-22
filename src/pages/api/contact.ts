@@ -46,6 +46,20 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const mailTo = import.meta.env.MAIL_TO;
     const resendApiKey = import.meta.env.RESEND_API_KEY;
 
+    console.log('=== Email Config ===');
+    console.log('MAIL_TO:', mailTo || 'MISSING');
+    console.log('RESEND_API_KEY:', resendApiKey ? 'exists' : 'MISSING');
+
+    if (!mailTo) {
+      console.error('MAIL_TO is not set');
+      return new Response('メール設定エラー', { status: 500 });
+    }
+
+    if (!resendApiKey) {
+      console.error('RESEND_API_KEY is not set');
+      return new Response('メール設定エラー', { status: 500 });
+    }
+
     const emailBody = `
 【医籍番号(下4桁)】
 ${idNumber}
