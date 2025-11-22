@@ -32,7 +32,7 @@ const siteKey = import.meta.env.RECAPTCHA_SITE_KEY;
 			</p>
 		</div>
 		<div class="c-contact__wrap">
-			<form id="contactForm" class="c-contact" action="/mail_new.php" method="post" autocomplete="off">
+			<form id="contactForm" class="c-contact" action="/api/contact" method="post" autocomplete="off">
 				<!-- reCAPTCHA -->
 				<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" />
 				
