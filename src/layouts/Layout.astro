@@ -43,7 +43,7 @@ import GoogleAnalytics from '../components/GoogleAnalytics.astro';
         property="og:description"
         content={description ?? '広島県小児科医会のホームページです。'}
     />
-    <meta property="og:image" content="favicon.ico" />
+    <meta property="og:image" content="/ogp.png" />
     <meta property="og:site_name" content="広島県小児科医会" />
     <meta property="og:locale" content="ja_JP" />
 
@@ -53,6 +53,8 @@ import GoogleAnalytics from '../components/GoogleAnalytics.astro';
     <!-- ファビコン設定 -->
     <!-- 通常のファビコン -->
     <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png" />
 
     <!-- iOS用 -->
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" sizes="180x180" />
