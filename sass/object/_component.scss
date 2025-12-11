@@ -309,7 +309,7 @@ footer
         }
     }
     &__lower {
-        display: none;
+        // display: none;
         margin-top: 4rem;
         &-title {
             font-size: clamp(1.25rem, 1.146rem + 0.44vw, 1.5rem);
@@ -1630,4 +1630,163 @@ thanks
 		opacity: 1;
 	}
 }
+
+/**********************************************************************
+archive
+**********************************************************************/
+.c-allergy {
+    margin-top: 3rem;
+    &__text {
+        p {
+            line-height: 1.6;
+            a {
+                text-decoration: underline;
+            }
+        }
+        p:nth-child(n+2) {
+            margin-top: 1rem;
+        } 
+    }
+    &__pdfs {
+        margin-top: 2rem;
+    }
+    &__pdf {
+        margin-top: 2rem;
+        span {
+            display: block;
+            margin-bottom: 1em;
+        }
+    }
+}
+
+.c-kokoro {
+    &__ttl {
+        margin-top: 2rem;
+        font-weight: normal;
+    }
+    &__text {
+        margin-top: 1.5rem;
+        p {
+            line-height: 1.6;
+        }
+        p:nth-child(n+2) {
+            margin-top: 1rem;
+        }
+        &--sign {
+            text-align: right;
+        }
+    }
+    &-qa {
+        margin-top: 1.5rem;
+        ul {
+            line-height: 1.6;
+            &:nth-child(n+2) {
+                margin-top: 1rem;
+            }
+        }
+        &--q {
+            span {
+                color: #d32f2f;
+            }
+        }
+        &--a {
+            margin-top: 0.5rem;
+            text-indent: -1em;
+            margin-left: 1em;
+            span {
+                color: $light-blue;
+            }
+        }
+    }
+    &-facility {
+        margin-top: 1.5rem;
+        &__item {
+            width: 100%;
+            height: 100%;
+            border-top: .1rem solid $black;
+            line-height: 1.6;
+            &:last-child {
+                border-bottom: .1rem solid $black;
+            }
+            tr {
+                display: grid;
+                grid-template-columns: 10% 85%;
+                gap: 0 5%;
+                align-items: start;
+                justify-content: center;
+                @include mq("md") {
+                    justify-content: start;
+                    grid-template-columns: inherit;
+                    grid-template-rows: auto 1fr;
+                    gap: 2% 0;
+                }
+                &:first-child {
+                    margin-top: 1rem;
+                }
+                &:last-child {
+                    margin-bottom: 1rem;
+                }
+            }
+            th {
+                text-align: center;
+                font-weight: normal;
+                @include mq("md") {
+                    text-align-last: left;
+                }
+            }
+            td {
+                a {
+                    text-decoration: underline;
+                    overflow-wrap: anywhere;
+                }
+            }
+        }
+    }
+    &__doctor {
+        margin-top: 1.5rem;
+        p {
+            line-height: 1.6;
+            &:nth-child(n+2) {
+                margin-top: .5rem;
+            }
+        }
+        &-item {
+            margin-top: 1rem;
+            padding: 1rem 2rem 0;
+            a {
+                text-decoration: underline;
+            }
+            &:nth-child(n+2) {
+                border-top: .1rem solid $black;
+            }
+            &:last-child {
+                padding-bottom: 1rem;
+                border-bottom: .1rem solid $black;
+            }
+        }
+    }
+}
+
+.c-breastfeeding {
+    &__text {
+        line-height: 1.6;
+        margin-top: 2rem;
+    }
+    &__item {
+        margin-top: 2rem;
+        padding: 2rem 2rem 0;
+        border-top: .1rem solid $black;
+        p {
+            line-height: 1.6;
+        }
+        @include mq("md") {
+            padding: 2rem 1rem 0;
+        }
+        &:last-child {
+            padding-bottom: 2rem;
+            border-bottom: .1rem solid $black;
+        }
+    }
+}
+
 

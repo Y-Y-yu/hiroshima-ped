@@ -1,0 +1,70 @@
+---
+
+// コンポーネント
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+
+const title = "アレルギー対策委員会";
+const description = "広島県小児科医会のアレルギー対策委員会のページです。食物アレルギーにより、家庭内や学校でアレルギー症状発症時の対応について、先生方の家族や学校への指導用資料として対応指導用のパンフレットをアップロードしてます";
+const url = "https://blog.hiroshima-ped.com/archive/allergy";
+const keywords = "広島県小児科医会, 広島県, 広島, 小児科医, 小児科, アレルギー対策委員会";
+
+
+//画像
+import home from '../../assets/image/アレルギー緊急時対応マニュアル（家庭版）.png'
+import school from '../../assets/image/アレルギー緊急時対応マニュアル.png'
+
+
+---
+
+<Layout title={title} description={description} url={url}>
+
+	<div class="c-subpage__upper">
+		<div class="c-subpage__upper-ttl">
+			Allergy
+		</div>
+		<div class="c-subpage__upper-pagination">
+			<span><a href="/">トップ</a></span>
+			<span></span>
+			<span>関連リンク</span>
+			<span></span>
+			<span>アレルギー対策委員会</span>
+		</div>
+	</div>
+	<section class="l-subpage">
+		<h1 class="c-subpage__ttl u-font--32">
+			アレルギー対策委員会
+		</h1>
+        <div class="c-allergy">
+            <div class="c-allergy__text">
+                <p>
+                    食物アレルギーによるアナフィラキシーへの対応指導用パンフレットについて
+                </p>
+                <p>
+                    食物アレルギーにより、家庭内や学校でアレルギー症状発症時の対応について、先生方の家族や学校への指導用資料として対応指導用のパンフレットをアップロードいたします。<br>
+                    このパンフレットは、香川県小児科医会のホームページに掲載されているもので、非常に分かりやすく記載されているため、広島県庁にもお願いし、保育所や学校の方々にも参考となるように、そのホームページにも掲載していただいています。<br>
+                    パンフレットは、家庭用、学校用、エピペンの使用法をアップロードいたしますが、各個人の症状についての確認用の資料や説明用の動画も香川県小児科医会のホームページには掲載されています。<br>
+                    以上の内容を、広島県小児科医会の先生方にもご参考としていただき、患者指導や日常の診療にお役立ていただければ幸いです。
+                </p>
+                <p>
+                    香川県小児科医会ホームページの当該部分：<br>
+                    <a href="http://kagawa-pedi.com/achievement/allergy.php" target="_blank">http://kagawa-pedi.com/achievement/allergy.php</a>
+                </p>
+            </div>
+            <div class="c-allergy__pdfs">
+                <div class="c-allergy__pdf">
+                    <a href="/src/assets/pdfs/アレルギー緊急時対応マニュアル（家庭版）.pdf" target="_blank">
+                        <span>◯家庭での対応用</span>
+                        <Image src={home} alt="アレルギー緊急時対応マニュアル（家庭版）.png" />
+                    </a>
+                </div>
+                <div class="c-allergy__pdf">
+                    <a href="/src/assets/pdfs/アレルギー緊急時対応マニュアル.pdf" target="_blank">
+                        <span>◯学校での対応用</span>
+                        <Image src={school} alt="アレルギー緊急時対応マニュアル.png" />
+                    </a>
+                </div>
+            </div>
+        </div>
+	</section>
+</Layout>
